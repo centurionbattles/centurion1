@@ -82,3 +82,48 @@ color: #d5c5c5;
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 900px) {
+  body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #sidePanel {
+    width: 100vw;
+    min-width: 0;
+    min-height: auto;
+    max-height: 40vh;
+    box-shadow: none;
+    padding: 1em 0.5em;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+  #mainContent {
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 42vh; /* leave space for panel */
+  }
+  #board {
+    width: 98vw;
+    height: 98vw;
+    max-width: 98vw;
+    max-height: 98vw;
+    margin-top: 10px;
+  }
+  .square {
+    font-size: 8vw;
+  }
+  #mainHeading {
+    font-size: 1.3em;
+  }
+}
