@@ -13,18 +13,36 @@
       margin: 0;
       padding: 0;
     }
-    #sidePanel {
-      width: 320px;
-      min-height: 100vh;
-      background: #333;
-      color: #ffe066;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 2em 1em;
-      box-shadow: 2px 0 12px #111;
-    }
+    <div id="sidePanel">
+  <h1 id="mainHeading">Centurion — Battle of the Legends</h1>
+
+  <div id="turnDisplay">Turn: <span id="turnSide">White</span> ⚪</div>
+  <div id="timerDisplay">Time Left: <span id="timeLeft">30</span>s</div>
+
+  <div id="scoreBoard">
+    <h3 class="sb-title">Score Board</h3>
+    <table id="scoreHistory" class="bowling-table">
+      <thead>
+        <tr>
+          <th>Rnd</th>
+          <th>Black</th>
+          <th>White</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JS will prepend rows here on round end -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2" class="tfoot-label">Cumulative</td>
+          <td id="totalWhiteScore">0</td>
+          <td id="totalBlackScore">0</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
     #mainContent {
       flex: 1;
       display: flex;
@@ -112,5 +130,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
