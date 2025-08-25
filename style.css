@@ -1,3 +1,8 @@
+/* =========================
+   styles.css (updated)
+   ========================= */
+
+/* Reset + base */
 html, body {
   height: 100%;
   margin: 0;
@@ -8,95 +13,17 @@ html, body {
 /* Global layout + readable default text color */
 body {
   display: flex;
-  flex-direction: row; /* Change from column to row */
+  flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
   min-height: 100vh;
   background: #222;
   margin: 0;
   padding: 0;
-
-  /* NEW: default text color so content isn't black on dark bg */
-  color: #ffe066; /* gold */
+  color: #ffe066; /* base text so it doesn't render black on dark */
 }
 
-/* Heading stays white for emphasis */
-#mainHeading {
-  font-family: var(--heading-font) !important;
-  font-weight: 900;
-  letter-spacing: 0.5px;   /* was 2px, tighter looks cleaner */
-  line-height: 1.1;
-  color: #fff !important;
-  text-shadow: 0 1px 0 rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.35);
-}
-
-/* Turn display kept white */
-#turnDisplay {
-  color: #fff;
-  font-size: 2em;
-  margin-bottom: 1em;
-}
-
-#board {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  width: 80vmin;
-  height: 80vmin;
-  max-width: 98vw;
-  max-height: 98vh;
-  background: #333;
-  border: 1px solid #555;
-  box-shadow: 0 0 20px #000;
-}
-
-.square {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 6vmin; /* Increased from 4vmin or 2.5vmin */
-  border: 2px solid #444;
-  box-sizing: border-box;
-  user-select: none;
-  transition: background 0.5s;
-}
-
-/* Timer: subtle light */
-#timerDisplay {
-  font-size: 1.1em;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #d5c5c5;
-}
-
-.light { background: #e8f2a9; }
-.dark  { background: #888; }
-.selected { outline: 20px solid rgb(213, 227, 104); }
-.valid-move-dot { width: 10px; height: 10px; background: green; border-radius: 50%; margin: auto; }
-
-/* Promotion modal has white bg, so use dark text for contrast */
-#promotionModal {
-  display: none;
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  border: 2px solid #333;
-  padding: 20px;
-  z-index: 100;
-  flex-direction: column;
-  align-items: center;
-
-  /* NEW */
-  color: #111;
-}
-
-#promotionOptions button { font-size: 2em; margin: 5px; }
-
-/* Side panel keeps its own white text */
+/* Side panel uses Century Gothic */
 #sidePanel {
   width: 320px;
   min-height: 100vh;
@@ -108,21 +35,35 @@ body {
   justify-content: flex-start;
   padding: 2em 1em;
   box-shadow: 2px 0 12px #111;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
 }
 
-/* Main content inherits the body's readable color */
-#mainContent {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  /* NEW */
-  color: inherit;
+/* Main heading in Century Gothic */
+#mainHeading {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif !important;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+  color: #fff !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.35);
+  margin: 0 0 .6em 0;
+  text-align: center;
 }
 
-/* ---------- Score/round table (desktop + mobile) ---------- */
+/* Info labels */
+#turnDisplay {
+  color: #fff;
+  font-size: 1.4em;
+  margin-bottom: .4em;
+}
+#timerDisplay {
+  font-size: 1.1em;
+  margin-bottom: .8em;
+  font-weight: bold;
+  color: #d5c5c5;
+}
+
+/* Score/round tables */
 .bowling-table {
   width: 100%;
   border-collapse: collapse;
@@ -131,7 +72,6 @@ body {
   font-size: 0.95em;
   table-layout: fixed;
 }
-
 .bowling-table th,
 .bowling-table td {
   border: 1px solid #ffe066;
@@ -140,33 +80,111 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #ffe066;   /* force text visible */
+  color: #ffe066;   /* ensure visible */
 }
-
 .bowling-table thead th {
   background: #444;
   color: #fff;      /* white headers */
   font-weight: 700;
 }
-
 .bowling-table tbody tr:nth-child(even) { background: #1c1c1c; }
 .bowling-table tbody tr:nth-child(odd)  { background: #171717; }
-
-.bowling-table tfoot td {
-  background: #2d2d2d;
-  font-weight: 700;
-}
-
+.bowling-table tfoot td { background: #2d2d2d; font-weight: 700; }
 .bowling-table .tfoot-label { text-align: right; }
 
-/* --------------------------------------------------------- */
+/* Main content */
+#mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  color: inherit; /* inherit body's gold by default */
+  padding: 1rem;
+  gap: 1rem;
+}
 
+/* Board */
+#board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 80vmin;
+  height: 80vmin;
+  max-width: 98vw;
+  max-height: 98vh;
+  background: #333;
+  border: 1px solid #555; /* thin border */
+  box-shadow: 0 0 10px #000; /* softer shadow */
+}
+
+.square {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6vmin; /* responsive pieces */
+  border: 2px solid #444;
+  box-sizing: border-box;
+  user-select: none;
+  transition: background 0.3s, outline-color 0.2s;
+}
+
+/* Board colors */
+.light { background: #e8f2a9; }
+.dark  { background: #888; }
+
+/* Hover and selected states */
+.square:hover {
+  outline: 3px solid #ffe066;
+  cursor: pointer;
+}
+.selected { outline: 6px solid rgb(213, 227, 104); }
+
+/* Valid move indicator */
+.valid-move-dot {
+  width: 10px;
+  height: 10px;
+  background: green;
+  border-radius: 50%;
+  margin: auto;
+}
+
+/* Promotion modal (white background, dark text for contrast) */
+#promotionModal {
+  display: none; /* toggled by JS */
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 2px solid #333;
+  padding: 20px;
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+  color: #111; /* readable on white */
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+#promotionOptions button {
+  font-size: 2em;
+  margin: 5px;
+  padding: .2em .4em;
+  background: #222;
+  color: #ffe066;
+  border: 1px solid #ffe066;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#promotionOptions button:hover { filter: brightness(1.2); }
+
+/* Mobile layout */
 @media (max-width: 900px) {
-  body {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
+  body { flex-direction: column; align-items: stretch; }
   #sidePanel {
     width: 100vw;
     min-width: 0;
@@ -179,39 +197,13 @@ body {
     justify-content: center;
     align-items: flex-start;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     z-index: 10;
     overflow-x: auto;
     overflow-y: auto;
   }
-
-  /* Make the side panel comfy with the table */
-  #sidePanel h1 { margin-bottom: .4em; }
-  #turnDisplay { margin-bottom: .4em; }
-  #timerDisplay { margin-bottom: .8em; }
-  
-  #mainContent {
-    width: 100vw;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 42vh; /* leave space for panel */
-  }
-
-  #board {
-    width: 98vw;
-    height: 98vw;
-    max-width: 98vw;
-    max-height: 98vw;
-    margin-top: 10px;
-  }
-
-  .square {
-    font-size: 8vw;
-  }
-
-  #mainHeading {
-    font-size: 1.3em;
-  }
+  #mainContent { width: 100vw; align-items: center; justify-content: center; margin-bottom: 42vh; }
+  #board { width: 98vw; height: 98vw; max-width: 98vw; max-height: 98vw; margin-top: 10px; }
+  .square { font-size: 8vw; }
+  #mainHeading { font-size: 1.3em; }
 }
