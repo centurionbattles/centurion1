@@ -107,6 +107,58 @@ color: #d5c5c5;
     overflow-x: auto;
     overflow-y: auto;
   }
+  /* Bowling-style scoreboard */
+#scoreBoard {
+  width: 100%;
+  margin-top: 1em;
+}
+
+.sb-title {
+  margin: 0 0 .5em 0;
+  color: #ffe066;
+  letter-spacing: .5px;
+  text-align: center;
+}
+
+.bowling-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #111;
+  color: #ffe066;
+  font-size: 0.95em;
+  table-layout: fixed;
+}
+
+.bowling-table th,
+.bowling-table td {
+  border: 1px solid #ffe066;
+  padding: 6px 4px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bowling-table thead th {
+  background: #444;
+  font-weight: 700;
+}
+
+.bowling-table tbody tr:nth-child(even) { background: #1c1c1c; }
+.bowling-table tbody tr:nth-child(odd)  { background: #171717; }
+
+.bowling-table tfoot td {
+  background: #2d2d2d;
+  font-weight: 700;
+}
+
+.bowling-table .tfoot-label { text-align: right; }
+
+/* Make the side panel comfy with the table */
+#sidePanel h1 { margin-bottom: .4em; }
+#turnDisplay { margin-bottom: .4em; }
+#timerDisplay { margin-bottom: .8em; }
+  
   #mainContent {
     width: 100vw;
     align-items: center;
