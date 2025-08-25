@@ -153,14 +153,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Pieces scale with board: each cell is ~board/10; use 90% of that */
-  font-size: calc(var(--board-size) / 10 * 0.9);
-  border: 0;                   /* remove per-cell borders to avoid thick lines */
-  line-height: 1;              /* tighter glyph box */
+  /* Pieces scale with board: each cell is ~board/10; use 95% of that */
+  font-size: calc(var(--board-size) / 10 * 0.95);
+  border: 0;                    /* remove per-cell borders to avoid thick lines */
+  line-height: 1;               /* tighter glyph box */
   box-sizing: border-box;
   user-select: none;
   transition: background 0.3s, box-shadow 0.2s; /* use box-shadow for highlights */
-}
 
 
 /* Board colors */
@@ -213,7 +212,6 @@ body {
 }
 #promotionOptions button:hover { filter: brightness(1.2); }
 
-/* Mobile layout */
 @media (max-width: 900px) {
   body { flex-direction: column; align-items: stretch; }
   #sidePanel {
@@ -234,7 +232,13 @@ body {
     overflow-y: auto;
   }
   #mainContent { width: 100vw; align-items: center; justify-content: center; margin-bottom: 42vh; }
-  #board { width: 98vw; height: 98vw; max-width: 98vw; max-height: 98vw; margin-top: 10px; }
-  .square { font-size: 8vw; }
+  #board {
+    --board-size: 98vw;
+    width: var(--board-size);
+    height: var(--board-size);
+    margin-top: 10px;
+  }
+  .square { font-size: calc(var(--board-size) / 10 * 0.95); }
   #mainHeading { font-size: 1.3em; }
 }
+
