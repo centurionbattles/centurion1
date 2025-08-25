@@ -15,12 +15,12 @@ body {
   padding: 0;
 }
 #mainHeading {
-  color: #fff;
-  font-size: 2.8em;
-  font-family: 'Georgia', serif;
-  margin-bottom: 0.5em;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 8px #333;
+  font-family: var(--heading-font) !important;
+  font-weight: 900;
+  letter-spacing: 0.5px;   /* was 2px, tighter looks cleaner */
+  line-height: 1.1;
+  color: #fff !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.35);
 }
 #turnDisplay {
   color: #fff;
