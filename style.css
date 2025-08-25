@@ -179,7 +179,7 @@ text-shadow:
 
 /* Board colors */
 .light { background: #FAFAFA; }
-.dark  { background: #e6e6e6; }
+.dark  { background: #ebe6b0; }
 
 /* Hover and selected states */
 .square:hover {
