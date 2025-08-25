@@ -10,6 +10,10 @@ html, body {
   box-sizing: border-box;
 }
 
+root {
+  --board-size: min(max(calc(100vw - 360px), 320px), 98vh);
+}
+
 /* Global layout + readable default text color */
 body {
   display: flex;
@@ -115,21 +119,25 @@ body {
   max-width: 98vw;
   max-height: 98vh;
   background: #333;
-  border: 0px solid #555; /* thin border */
-  box-shadow: 0 0 10px #000; /* softer shadow */
+  border: 0px solid #555;  
+  box-shadow: 0 0 10px #000;
 } */
+
+
 
 #board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  /* Fill width minus side panel, but don't exceed viewport height */
-  width: min(calc(100vw - 360px), 98vh);
-  height: min(calc(100vw - 360px), 98vh);
-  background: #555;             /* shows through gap as hairline grid lines */
-  gap: 1px;                     /* thin separators between squares */
-  border: 1px solid #555;       /* thin outer frame */
-  box-shadow: 0 0 10px #000;    /* softer shadow */
+
+  /* Use the safe variable with a fallback in case vars fail */
+  width: var(--board-size, 92vmin);
+  height: var(--board-size, 92vmin);
+
+  background: #555;        /* shows through gap as hairline grid lines */
+  gap: 1px;                /* thin separators between squares */
+  border: 1px solid #555;  /* thin outer frame */
+  box-shadow: 0 0 10px #000;
 }
 
 /* PREVIOUS SQUARE 
@@ -139,7 +147,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 6vmin; /* responsive pieces */
+  font-size: 6vmin; 
   border: 0px solid #444;
   box-sizing: border-box;
   user-select: none;
@@ -153,14 +161,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Pieces scale with board: each cell is ~board/10; use 95% of that */
-  font-size: calc(var(--board-size) / 10 * 0.95);
-  border: 0;                    /* remove per-cell borders to avoid thick lines */
-  line-height: 1;               /* tighter glyph box */
+
+  /* 95% of a cell height, with a fallback if vars aren’t supported */
+  font-size: calc(var(--board-size, 92vmin) / 10 * 0.95);
+
+  border: 0;           /* remove per-cell borders to avoid thick lines */
+  line-height: 1;
   box-sizing: border-box;
   user-select: none;
-  transition: background 0.3s, box-shadow 0.2s; /* use box-shadow for highlights */
-
+  transition: background 0.3s, box-shadow 0.2s;
+}
 
 /* Board colors */
 .light { background: #e8f2a9; }
