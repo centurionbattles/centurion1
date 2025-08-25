@@ -46,8 +46,8 @@ const piecesUnicode = {
   B: '♝', // Bishop
   Q: '♛', // Queen
   K: '♚', // King
-  A: 'A', // Archer
-  W: 'D'  // Diplomat
+  A: 'ᕕ', // Archer
+  W: 'ษ'  // Diplomat
 };
 
 function createEmptyBoard() {
@@ -487,3 +487,4 @@ function resetRound() {
 }
 
 initGame();
+
