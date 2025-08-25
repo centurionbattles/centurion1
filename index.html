@@ -4,50 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Centurion Game</title>
-
-  <style>
-    /* --- use the CSS file I gave you earlier (merged here inline) --- */
-    html, body { height: 100%; margin: 0; padding: 0; box-sizing: border-box; }
-    body { display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start;
-           min-height: 100vh; background: #222; margin: 0; padding: 0; color: #ffe066; }
-    #sidePanel { width: 320px; min-height: 100vh; background: #333; color: #fff;
-                 display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-                 padding: 2em 1em; box-shadow: 2px 0 12px #111; }
-    #mainHeading { font-weight: 900; letter-spacing: .5px; line-height: 1.1; color: #fff !important;
-                   text-shadow: 0 1px 0 rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.35); margin: 0 0 .6em; text-align: center; }
-    #turnDisplay { color: #fff; font-size: 1.4em; margin-bottom: .4em; }
-    #timerDisplay { font-size: 1.1em; margin-bottom: .8em; font-weight: bold; color: #d5c5c5; }
-    .bowling-table { width: 100%; border-collapse: collapse; background: #111; color: #ffe066; font-size: .95em; }
-    .bowling-table th, .bowling-table td { border: 1px solid #ffe066; padding: 6px 4px; text-align: center;
-                                           overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ffe066; }
-    .bowling-table thead th { background: #444; color: #fff; font-weight: 700; }
-    .bowling-table tbody tr:nth-child(even) { background: #1c1c1c; }
-    .bowling-table tbody tr:nth-child(odd) { background: #171717; }
-    .bowling-table tfoot td { background: #2d2d2d; font-weight: 700; }
-    #mainContent { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-                   min-width: 0; color: inherit; padding: 1rem; gap: 1rem; }
-    #board { display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);
-             width: 80vmin; height: 80vmin; max-width: 98vw; max-height: 98vh; background: #333;
-             border: 1px solid #555; box-shadow: 0 0 20px #000; }
-    .square { display: flex; align-items: center; justify-content: center; font-size: 6vmin; border: 2px solid #444;
-              user-select: none; transition: background .3s, outline-color .2s; }
-    .light { background: #e8f2a9; } .dark { background: #888; }
-    .selected { outline: 6px solid rgb(213, 227, 104); }
-    .valid-move-dot { width: 10px; height: 10px; background: green; border-radius: 50%; margin: auto; }
-    #promotionModal { display: none; position: fixed; top: 30%; left: 50%; transform: translateX(-50%);
-                      background: #fff; border: 2px solid #333; padding: 20px; z-index: 100;
-                      flex-direction: column; align-items: center; gap: .6rem; color: #111;
-                      border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
-    #promotionOptions button { font-size: 2em; margin: 5px; padding: .2em .4em; background: #222; color: #ffe066;
-                               border: 1px solid #ffe066; border-radius: 8px; cursor: pointer; }
-    @media (max-width:900px){ body{flex-direction:column;align-items:stretch;}
-      #sidePanel{width:100vw;min-width:0;min-height:auto;max-height:40vh;box-shadow:none;padding:1em .5em;
-                 flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:flex-start;position:fixed;
-                 bottom:0;left:0;right:0;z-index:10;overflow-x:auto;overflow-y:auto;}
-      #mainContent{width:100vw;align-items:center;justify-content:center;margin-bottom:42vh;}
-      #board{width:98vw;height:98vw;max-width:98vw;max-height:98vw;margin-top:10px;}
-      .square{font-size:8vw;} #mainHeading{font-size:1.3em;} }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- SIDE PANEL -->
@@ -105,8 +62,8 @@
   <div id="mainContent">
     <div id="board"></div>
 
-    <div id="promotionModal">
-      <h3>Choose promotion:</h3>
+    <div id="promotionModal" role="dialog" aria-modal="true" aria-labelledby="promoTitle">
+      <h3 id="promoTitle">Choose promotion:</h3>
       <div id="promotionOptions"></div>
     </div>
   </div>
@@ -114,4 +71,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
