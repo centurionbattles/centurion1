@@ -115,7 +115,7 @@ body {
   max-width: 98vw;
   max-height: 98vh;
   background: #333;
-  border: 1px solid #555; /* thin border */
+  border: 0px solid #555; /* thin border */
   box-shadow: 0 0 10px #000; /* softer shadow */
 }
 
