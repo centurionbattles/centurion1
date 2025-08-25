@@ -1,4 +1,5 @@
 console.log("script loaded"); // Confirm script runs
+
 const boardElement = document.getElementById('board');
 const turnDisplay = document.getElementById('turnDisplay');
 const promotionModal = document.getElementById('promotionModal');
@@ -37,6 +38,7 @@ function switchPlayer() {
   updateTurnDisplay();
   resetTimer();
 }
+
 const piecesUnicode = {
   P: '♟', // Pawn
   R: '♜', // Rook
@@ -50,9 +52,9 @@ const piecesUnicode = {
 
 function createEmptyBoard() {
   board = [];
-  for(let r=0; r<boardSize; r++){
+  for (let r = 0; r < boardSize; r++) {
     const row = [];
-    for(let c=0; c<boardSize; c++){
+    for (let c = 0; c < boardSize; c++) {
       row.push(null);
     }
     board.push(row);
@@ -62,23 +64,24 @@ function createEmptyBoard() {
 function setupPieces() {
   // Black side (player 1) top rows
   const blackPiecesRow = [
-    {type:'R'}, {type:'N'}, {type:'B'},{type:'W'}, {type:'Q'}, {type:'K'}, {type:'W'}, {type:'B'}, {type:'N'}, {type:'R'}
+    {type:'R'}, {type:'N'}, {type:'B'}, {type:'W'}, {type:'Q'}, {type:'K'}, {type:'W'}, {type:'B'}, {type:'N'}, {type:'R'}
   ];
   const blackPiecesRow2 = [
-    {type:'P'}, {type:'P'}, {type:'P'},{type:'P'}, {type:'A'}, {type:'A'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}
+    {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'A'}, {type:'A'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}
   ];
-  for(let c=0; c<boardSize; c++) {
+  for (let c = 0; c < boardSize; c++) {
     board[0][c] = {...blackPiecesRow[c], player:1};
     board[1][c] = {...blackPiecesRow2[c], player:1};
   }
 
   // White side (player 2) bottom rows
   const whitePiecesRow = [
-    {type:'R'}, {type:'N'}, {type:'B'},{type:'W'}, {type:'Q'}, {type:'K'}, {type:'W'}, {type:'B'}, {type:'N'}, {type:'R'} ]
-    const WhitePiecesRow2 = [
-    {type:'P'}, {type:'P'}, {type:'P'},{type:'P'}, {type:'A'}, {type:'A'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}
+    {type:'R'}, {type:'N'}, {type:'B'}, {type:'W'}, {type:'Q'}, {type:'K'}, {type:'W'}, {type:'B'}, {type:'N'}, {type:'R'}
   ];
-  for(let c=0; c<boardSize; c++) {
+  const WhitePiecesRow2 = [
+    {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'A'}, {type:'A'}, {type:'P'}, {type:'P'}, {type:'P'}, {type:'P'}
+  ];
+  for (let c = 0; c < boardSize; c++) {
     board[9][c] = {...whitePiecesRow[c], player:2};
     board[8][c] = {...WhitePiecesRow2[c], player:2};
   }
@@ -86,27 +89,27 @@ function setupPieces() {
 
 function renderBoard() {
   boardElement.innerHTML = '';
-  for(let r=0; r<boardSize; r++){
-    for(let c=0; c<boardSize; c++){
+  for (let r = 0; r < boardSize; r++) {
+    for (let c = 0; c < boardSize; c++) {
       const sq = document.createElement('div');
       sq.classList.add('square');
-      sq.classList.add( (r+c) % 2 === 0 ? 'light' : 'dark' );
+      sq.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
       sq.dataset.row = r;
       sq.dataset.col = c;
 
       const piece = board[r][c];
-      if(piece){
+      if (piece) {
         sq.textContent = piecesUnicode[piece.type];
         sq.style.color = piece.player === 1 ? 'black' : 'white';
       }
 
-      // Highlight selected
-     if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
+      // ✅ Highlight selected square properly
+      if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
         sq.classList.add('selected');
       }
 
       // Show valid move dots
-      if(validMoves.some(m => m[0] === r && m[1] === c)){
+      if (validMoves.some(m => m[0] === r && m[1] === c)) {
         const dot = document.createElement('div');
         dot.classList.add('valid-move-dot');
         sq.appendChild(dot);
@@ -122,8 +125,8 @@ function onSquareClick(r, c) {
   const clickedPiece = board[r][c];
 
   // If no piece selected yet
-  if(!selectedPiece){
-    if(clickedPiece && clickedPiece.player === currentPlayer){
+  if (!selectedPiece) {
+    if (clickedPiece && clickedPiece.player === currentPlayer) {
       selectedPiece = {r, c, piece: clickedPiece};
       validMoves = getValidMoves(r,c);
       renderBoard();
@@ -132,17 +135,17 @@ function onSquareClick(r, c) {
   }
 
   // Diplomat conversion logic (special case)
-  if(selectedPiece.piece.type === 'W'){
+  if (selectedPiece.piece.type === 'W') {
     // Check if clicked square is adjacent and enemy piece (not king)
     const dr = Math.abs(r - selectedPiece.r);
     const dc = Math.abs(c - selectedPiece.c);
     const target = board[r][c];
-    if(
-      dr <=1 && dc <=1 &&
+    if (
+      dr <= 1 && dc <= 1 &&
       target &&
       target.player !== currentPlayer &&
       target.type !== 'K'
-    ){
+    ) {
       // Convert enemy piece to currentPlayer without moving diplomat
       const pts = piecePoints[target.type] || 0;
       // Deduct points from opponent and add to current player
@@ -157,7 +160,7 @@ function onSquareClick(r, c) {
       // Switch turn and reset selection
       selectedPiece = null;
       validMoves = [];
-      updatePointsDisplay(); // Update the points display
+      updatePointsDisplay();
       currentPlayer = currentPlayer === 1 ? 2 : 1;
       updateTurnDisplay();
       renderBoard();
@@ -166,7 +169,7 @@ function onSquareClick(r, c) {
   }
 
   // If clicked on valid move square
-  if(validMoves.some(m => m[0] === r && m[1] === c)){
+  if (validMoves.some(m => m[0] === r && m[1] === c)) {
     movePiece(selectedPiece.r, selectedPiece.c, r, c);
     selectedPiece = null;
     validMoves = [];
@@ -175,7 +178,7 @@ function onSquareClick(r, c) {
   }
 
   // Clicked another own piece => select it
-  if(clickedPiece && clickedPiece.player === currentPlayer){
+  if (clickedPiece && clickedPiece.player === currentPlayer) {
     selectedPiece = {r, c, piece: clickedPiece};
     validMoves = getValidMoves(r, c);
     renderBoard();
@@ -190,14 +193,12 @@ function onSquareClick(r, c) {
 
 function getValidMoves(r, c) {
   const piece = board[r][c];
-  if(!piece) return [];
+  if (!piece) return [];
 
-  let moves = [];
-
-  // Find possible moves for each piece type
-  for(let rr=0; rr<boardSize; rr++){
-    for(let cc=0; cc<boardSize; cc++){
-      if(canMove(r,c,rr,cc)){
+  const moves = [];
+  for (let rr = 0; rr < boardSize; rr++) {
+    for (let cc = 0; cc < boardSize; cc++) {
+      if (canMove(r,c,rr,cc)) {
         moves.push([rr, cc]);
       }
     }
@@ -207,17 +208,17 @@ function getValidMoves(r, c) {
 
 function canMove(r1, c1, r2, c2) {
   const piece = board[r1][c1];
-  if(!piece) return false;
+  if (!piece) return false;
 
   const target = board[r2][c2];
-  if(target && target.player === piece.player) return false;
+  if (target && target.player === piece.player) return false;
 
   const dr = r2 - r1;
   const dc = c2 - c1;
   const absDr = Math.abs(dr);
   const absDc = Math.abs(dc);
 
-  switch(piece.type){
+  switch (piece.type) {
     case 'P': return canPawnMove(r1,c1,r2,c2,piece);
     case 'R': return canRookMove(r1,c1,r2,c2);
     case 'N': return canKnightMove(dr,dc);
@@ -235,37 +236,31 @@ function canPawnMove(r1,c1,r2,c2,piece){
   const startRow = piece.player === 1 ? 1 : 8;
   const target = board[r2][c2];
 
-  // Move forward 1 if empty
-  if(c1 === c2 && r2 === r1 + direction && !target) return true;
-
-  // Move forward 2 if at start and path clear
-  if(c1 === c2 && r1 === startRow && r2 === r1 + 2*direction && !target && !board[r1 + direction][c1]) return true;
-
-  // Capture diagonally
-  if(Math.abs(c2 - c1) === 1 && r2 === r1 + direction && target && target.player !== piece.player) return true;
-
+  if (c1 === c2 && r2 === r1 + direction && !target) return true; // forward 1
+  if (c1 === c2 && r1 === startRow && r2 === r1 + 2*direction && !target && !board[r1 + direction][c1]) return true; // forward 2
+  if (Math.abs(c2 - c1) === 1 && r2 === r1 + direction && target && target.player !== piece.player) return true; // capture
   return false;
 }
 
 function canRookMove(r1,c1,r2,c2){
-  if(r1 !== r2 && c1 !== c2) return false;
-  if(isPathBlocked(r1,c1,r2,c2)) return false;
+  if (r1 !== r2 && c1 !== c2) return false;
+  if (isPathBlocked(r1,c1,r2,c2)) return false;
   return true;
 }
 
 function canKnightMove(dr, dc){
-  return (Math.abs(dr) === 2 && Math.abs(dc) === 1) || (Math.abs(dr) ===1 && Math.abs(dc) === 2);
+  return (Math.abs(dr) === 2 && Math.abs(dc) === 1) || (Math.abs(dr) === 1 && Math.abs(dc) === 2);
 }
 
 function canBishopMove(r1,c1,r2,c2){
-  if(Math.abs(r2 - r1) !== Math.abs(c2 - c1)) return false;
-  if(isPathBlocked(r1,c1,r2,c2)) return false;
+  if (Math.abs(r2 - r1) !== Math.abs(c2 - c1)) return false;
+  if (isPathBlocked(r1,c1,r2,c2)) return false;
   return true;
 }
 
 function canQueenMove(r1,c1,r2,c2){
-  if(r1 === r2 || c1 === c2) return canRookMove(r1,c1,r2,c2);
-  if(Math.abs(r2 - r1) === Math.abs(c2 - c1)) return canBishopMove(r1,c1,r2,c2);
+  if (r1 === r2 || c1 === c2) return canRookMove(r1,c1,r2,c2);
+  if (Math.abs(r2 - r1) === Math.abs(c2 - c1)) return canBishopMove(r1,c1,r2,c2);
   return false;
 }
 
@@ -276,30 +271,28 @@ function canKingMove(absDr, absDc){
 function canArcherMove(r1,c1,r2,c2){
   const dr = r2 - r1;
   const dc = c2 - c1;
-
-  // Archer moves or captures exactly 2 squares any direction, jumps over pieces
-  if(
+  // Archer moves exactly 2 squares in any direction (jumps)
+  if (
     (Math.abs(dr) === 2 && dc === 0) ||
     (Math.abs(dc) === 2 && dr === 0) ||
     (Math.abs(dr) === 2 && Math.abs(dc) === 2)
   ) return true;
-
   return false;
 }
 
 function canDiplomatMove(absDr, absDc){
   // Diplomat moves like king (1 square any direction)
-  return absDr <=1 && absDc <=1;
+  return absDr <= 1 && absDc <= 1;
 }
 
 function isPathBlocked(r1,c1,r2,c2){
-  const dr = Math.sign(r2-r1);
-  const dc = Math.sign(c2-c1);
+  const dr = Math.sign(r2 - r1);
+  const dc = Math.sign(c2 - c1);
   let r = r1 + dr;
   let c = c1 + dc;
 
-  while(r !== r2 || c !== c2){
-    if(board[r][c]) return true;
+  while (r !== r2 || c !== c2) {
+    if (board[r][c]) return true;
     r += dr;
     c += dc;
   }
@@ -310,14 +303,14 @@ function movePiece(r1, c1, r2, c2) {
   const piece = board[r1][c1];
   const target = board[r2][c2];
 
-  // Diplomat does not move when converting
-  if(piece.type === 'W' && !target && (Math.abs(r2 - r1) <= 1 && Math.abs(c2 - c1) <= 1)) {
+  // Diplomat special case
+  if (piece.type === 'W' && !target && (Math.abs(r2 - r1) <= 1 && Math.abs(c2 - c1) <= 1)) {
     board[r2][c2] = piece;
     board[r1][c1] = null;
   } else if (piece.type === 'W' && target && target.player !== piece.player) {
-    return;
+    return; // handled by conversion path earlier
   } else {
-    // Normal move and capture
+    // Normal move/capture
     if (target) {
       addPointsForCapture(target);
       if (target.type === 'K') {
@@ -401,7 +394,7 @@ function startTimer() {
   timerId = setInterval(() => {
     timeLeft--;
     timerDisplay.textContent = `Time Left: ${timeLeft}s`;
-    if(timeLeft <= 0){
+    if (timeLeft <= 0) {
       clearInterval(timerId);
       alert(`Time's up! Player ${currentPlayer === 1 ? 'Black' : 'White'} loses turn.`);
       switchPlayer();
@@ -494,6 +487,3 @@ function resetRound() {
 }
 
 initGame();
-
-
-
