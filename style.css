@@ -1,4 +1,4 @@
-/* =========================
+e6/* =========================
    styles.css (updated)
    ========================= */
 
@@ -179,7 +179,7 @@ text-shadow:
 
 /* Board colors */
 .light { background: #FAFAFA; }
-.dark  { background: #888; }
+.dark  { background: #e6e6e6; }
 
 /* Hover and selected states */
 .square:hover {
