@@ -105,7 +105,7 @@ body {
   gap: 1rem;
 }
 
-/* Board */
+/* Board 
 #board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -117,7 +117,21 @@ body {
   background: #333;
   border: 0px solid #555; /* thin border */
   box-shadow: 0 0 10px #000; /* softer shadow */
+} */
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  /* Fill width minus side panel, but don't exceed viewport height */
+  width: min(calc(100vw - 360px), 98vh);
+  height: min(calc(100vw - 360px), 98vh);
+  background: #555;             /* shows through gap as hairline grid lines */
+  gap: 1px;                     /* thin separators between squares */
+  border: 1px solid #555;       /* thin outer frame */
+  box-shadow: 0 0 10px #000;    /* softer shadow */
 }
+
 
 .square {
   width: 100%;
