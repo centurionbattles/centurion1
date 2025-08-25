@@ -101,8 +101,8 @@ function renderBoard() {
       }
 
       // Highlight selected
-      if(selectedPiece && selectedPiece.r === r && selectedPiece.c === c){
-        sq.classList.add('highlight');
+     if (selectedPiece && selectedPiece.r === r && selectedPiece.c === c) {
+        sq.classList.add('selected');
       }
 
       // Show valid move dots
@@ -494,5 +494,6 @@ function resetRound() {
 }
 
 initGame();
+
 
 
