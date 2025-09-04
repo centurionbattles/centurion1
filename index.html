@@ -67,7 +67,115 @@
     </div>
   </div>
 
-    
+  <!-- Help / How to Play Overlay -->
+<div id="helpOverlay" aria-hidden="true">
+  <div id="helpPanel" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <button id="helpClose" class="help-close" aria-label="Close help">×</button>
+
+    <h2 id="helpTitle">Centurion — How to Play</h2>
+
+    <div class="helpControls">
+      <button id="expandAll" type="button">Expand all</button>
+      <button id="collapseAll" type="button">Collapse all</button>
+    </div>
+
+    <div class="helpContent">
+
+      <details open>
+        <summary>Quick Start</summary>
+        <ol>
+          <li>White moves first in odd rounds, Black in even rounds (auto-alternates).</li>
+          <li>You have <strong>30s per move</strong>. If time runs out, you lose your turn.</li>
+          <li>Capture pieces to earn points; capturing the <strong>King</strong> ends the round immediately.</li>
+          <li>After 4 rounds, the higher <strong>Total Score</strong> wins. Ties trigger a 5th tie-breaker round.</li>
+        </ol>
+      </details>
+
+      <details>
+        <summary>Board & Setup</summary>
+        <p>Board is <strong>10×10</strong>. Each side has: R, N, B, W (Diplomat), Q, K, W, B, N, R and a second rank of pawns with two <strong>Archers (A)</strong>.</p>
+      </details>
+
+      <details>
+        <summary>Turn & Timer</summary>
+        <ul>
+          <li><strong>30s</strong> per move; timer turns red and flashes under 10s.</li>
+          <li>Timer theme: Black (black + cream), White (white + grey).</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Piece Movement</summary>
+        <ul>
+          <li><strong>P</strong> Pawn: 1 forward; 2 from start; diagonal capture. Promotes on last rank (Q/R/B/A/N).</li>
+          <li><strong>R</strong> Rook: orthogonal, any squares (no jump).</li>
+          <li><strong>N</strong> Knight: L-shape (jumps).</li>
+          <li><strong>B</strong> Bishop: diagonal, any squares (no jump).</li>
+          <li><strong>Q</strong> Queen: rook + bishop.</li>
+          <li><strong>K</strong> King: 1 square any direction.</li>
+          <li><strong>A</strong> Archer: exactly 2 squares in any direction (jumps).</li>
+          <li><strong>W</strong> Diplomat: moves like a King; can convert (see below).</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Points & Scoring</summary>
+        <table class="helpPoints">
+          <thead><tr><th>Piece</th><th>Points</th></tr></thead>
+          <tbody id="helpPointsBody">
+            <tr><td>King (K)</td><td>20</td></tr>
+            <tr><td>Queen (Q)</td><td>12</td></tr>
+            <tr><td>Rook (R)</td><td>4</td></tr>
+            <tr><td>Bishop (B)</td><td>4</td></tr>
+            <tr><td>Knight (N)</td><td>3</td></tr>
+            <tr><td>Archer (A)</td><td>3</td></tr>
+            <tr><td>Diplomat (W)</td><td>6</td></tr>
+            <tr><td>Pawn (P)</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details>
+        <summary>Diplomat Conversion</summary>
+        <ul>
+          <li>Click your Diplomat (W), then an <strong>adjacent enemy (non-King)</strong>.</li>
+          <li>You gain its <strong>points immediately</strong>, then the piece <strong>switches sides</strong>.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>Promotion</summary>
+        <p>Pawns promote on the last rank to <strong>Q, R, B, A, N</strong>.</p>
+      </details>
+
+      <details>
+        <summary>Rounds & Winning</summary>
+        <ul>
+          <li>Round ends on <strong>King capture</strong>.</li>
+          <li>Round points are added to <strong>Total Score</strong>, then round points reset.</li>
+          <li>Most points after 4 rounds wins (tie → 5th round).</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>UI Tips</summary>
+        <ul>
+          <li>Valid moves show as green dots.</li>
+          <li>Click a different own piece to switch selection; click empty to deselect.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>FAQ</summary>
+        <p><strong>Do Archers jump?</strong> Yes, exactly two squares in any direction.</p>
+        <p><strong>Can the Diplomat convert a King?</strong> No.</p>
+        <p><strong>Who starts first?</strong> White in odd rounds, Black in even rounds.</p>
+      </details>
+
+    </div>
+  </div>
+</div>
+  
 
     
   <!-- MAIN CONTENT -->
@@ -84,6 +192,7 @@
   <script src="help.js"></script>
 </body>
 </html>
+
 
 
 
