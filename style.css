@@ -106,18 +106,36 @@ body {
   50%  { opacity: 0.6; }
   100% { opacity: 1; }
 }
-/* Current Round: large, prominent */
-.current-round-table.big-score {
-  font-size: 1.25rem;
-  border: 2px solid #ffe066;
-  box-shadow: 0 0 24px rgba(255,224,102,.18);
-}
-.current-round-table.big-score tbody td { padding: 10px 8px; }
+/* Current Round table: no borders, no zebra */
+#currentRoundTable { border: none !important; box-shadow: none !important; }
+#currentRoundTable th, #currentRoundTable td { border: none !important; }
+#currentRoundTable thead th { background: transparent !important; }
+#currentRoundTable tbody tr:nth-child(even),
+#currentRoundTable tbody tr:nth-child(odd) { background: transparent !important; }
 
-/* Leader highlight */
-.current-round-table tbody tr.leader td {
-  background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
-  box-shadow: inset 0 0 0 1px rgba(255,224,102,.35);
+/* Fixed themes per row (NOT dynamic by turn) */
+#currentRoundRowBlack td {
+  background: #000 !important;
+  color: #f5eec2 !important; /* cream */
+}
+#currentRoundRowWhite td {
+  background: #fff !important;
+  color: #666 !important;    /* grey */
+}
+
+/* Make the numbers large & bold */
+#currentRoundTable tbody td:nth-child(2) span {
+  display: inline-block;
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+}
+
+/* Optional: leader highlight WITHOUT changing background colors */
+#currentRoundTable tbody tr.leader td {
+  box-shadow: inset 0 0 0 2px #ffe066;
 }
 
 /* Number pop animation */
