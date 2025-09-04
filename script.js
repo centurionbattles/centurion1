@@ -121,83 +121,64 @@ function renderBoard() {
   }
 }
 
-function onSquareClick(r, c) {                                          // [L001]
-  const clickedPiece = board[r][c];                                     // [L002]
+function onSquareClick(r, c) {
+  const clickedPiece = board[r][c];
 
-  // ───────────────────────────────────────────────────────────────────
-  // If no piece is selected yet, allow selecting your own piece        // [L005]
-  // ───────────────────────────────────────────────────────────────────
-  if (!selectedPiece) {                                                 // [L006]
-    if (clickedPiece && clickedPiece.player === currentPlayer) {        // [L007]
-      selectedPiece = { r, c, piece: clickedPiece };                    // [L008]
-      validMoves = getValidMoves(r, c);                                 // [L009]
-      renderBoard();                                                    // [L010]
-    }                                                                   // [L011]
-    return;                                                             // [L012]
-  }                                                                     // [L013]
+  // If no piece selected yet
+  if (!selectedPiece) {
+    if (clickedPiece && clickedPiece.player === currentPlayer) {
+      selectedPiece = { r, c, piece: clickedPiece };
+      validMoves = getValidMoves(r, c);
+      renderBoard();
+    }
+    return;
+  }
 
-  // ───────────────────────────────────────────────────────────────────
-  // Diplomat conversion logic (special case)                            // [L016]
-  // - Convert an adjacent enemy (non-king) without moving the diplomat // [L017]
-  // - Score goes to the converter (use addPointsForCapture)            // [L018]
-  // - Then flip ownership and switch turn via switchPlayer()           // [L019]
-  // ───────────────────────────────────────────────────────────────────
-  if (selectedPiece.piece.type === 'W') {                               // [L020]
-    const dr = Math.abs(r - selectedPiece.r);                           // [L021]
-    const dc = Math.abs(c - selectedPiece.c);                           // [L022]
-    const target = board[r][c];                                         // [L023]
+  // Diplomat conversion: adjacent enemy, not king
+  if (selectedPiece.piece.type === 'W') {
+    const dr = Math.abs(r - selectedPiece.r);
+    const dc = Math.abs(c - selectedPiece.c);
+    const target = board[r][c];
 
-    if (                                                                  // [L025]
-      dr <= 1 && dc <= 1 &&                                               // [L026]
-      target &&                                                           // [L027]
-      target.player !== currentPlayer &&                                  // [L028]
-      target.type !== 'K'                                                 // [L029]
-    ) {                                                                   // [L030]
-      // ✅ Score for converter as if it "captured" (must happen BEFORE flip)
-      addPointsForCapture(target);                                        // [L032]
+    if (dr <= 1 && dc <= 1 && target && target.player !== currentPlayer && target.type !== 'K') {
+      // Award points to the converter (use existing capture helper)
+      addPointsForCapture(target);
 
-      // Flip ownership (conversion)                                      // [L034]
-      board[r][c].player = currentPlayer;                                 // [L035]
+      // Flip ownership to current player (conversion, Diplomat does not move)
+      board[r][c].player = currentPlayer;
 
-      // Clean up UI state and advance turn (resets timer too)            // [L037]
-      selectedPiece = null;                                               // [L038]
-      validMoves = [];                                                    // [L039]
-      updatePointsDisplay();                                              // [L040]
-      switchPlayer();                                                     // [L041]
-      renderBoard();                                                      // [L042]
-      return;                                                             // [L043]
-    }                                                                     // [L044]
-  }                                                                       // [L045]
+      // Clear selection, update, and switch turn (resets timer)
+      selectedPiece = null;
+      validMoves = [];
+      updatePointsDisplay();
+      switchPlayer();
+      renderBoard();
+      return;
+    }
+  }
 
-  // ───────────────────────────────────────────────────────────────────
-  // If clicked on a valid move square, perform the move                 // [L048]
-  // ───────────────────────────────────────────────────────────────────
-  if (validMoves.some(m => m[0] === r && m[1] === c)) {                 // [L049]
-    movePiece(selectedPiece.r, selectedPiece.c, r, c);                   // [L050]
-    selectedPiece = null;                                                // [L051]
-    validMoves = [];                                                     // [L052]
-    renderBoard();                                                       // [L053]
-    return;                                                              // [L054]
-  }                                                                       // [L055]
+  // Normal move to a valid square
+  if (validMoves.some(m => m[0] === r && m[1] === c)) {
+    movePiece(selectedPiece.r, selectedPiece.c, r, c);
+    selectedPiece = null;
+    validMoves = [];
+    renderBoard();
+    return;
+  }
 
-  // ───────────────────────────────────────────────────────────────────
-  // If you clicked another of your own pieces, switch selection         // [L058]
-  // ───────────────────────────────────────────────────────────────────
-  if (clickedPiece && clickedPiece.player === currentPlayer) {          // [L059]
-    selectedPiece = { r, c, piece: clickedPiece };                      // [L060]
-    validMoves = getValidMoves(r, c);                                   // [L061]
-    renderBoard();                                                      // [L062]
-    return;                                                             // [L063]
-  }                                                                     // [L064]
+  // Clicked another own piece => reselect
+  if (clickedPiece && clickedPiece.player === currentPlayer) {
+    selectedPiece = { r, c, piece: clickedPiece };
+    validMoves = getValidMoves(r, c);
+    renderBoard();
+    return;
+  }
 
-  // ───────────────────────────────────────────────────────────────────
-  // Otherwise, clear selection                                          // [L067]
-  // ───────────────────────────────────────────────────────────────────
-  selectedPiece = null;                                                 // [L068]
-  validMoves = [];                                                      // [L069]
-  renderBoard();                                                        // [L070]
-}                                                                       // [L071]
-
+  // Otherwise, deselect
+  selectedPiece = null;
+  validMoves = [];
+  renderBoard();
+}
   // If clicked on valid move square
   if (validMoves.some(m => m[0] === r && m[1] === c)) {
     movePiece(selectedPiece.r, selectedPiece.c, r, c);
@@ -517,6 +498,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
