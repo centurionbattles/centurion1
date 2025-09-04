@@ -78,7 +78,11 @@
     </div>
 
     <div class="helpContent">
-
+      <details open>
+        <summary>Pieces at a glance</summary>
+        <div id="helpPiecesGrid" class="pieces-grid"><!-- filled by help.js --></div>
+      </details>
+      
       <details open>
         <summary>Quick Start</summary>
         <ol>
@@ -119,7 +123,9 @@
       <details>
         <summary>Points & Scoring</summary>
         <table class="helpPoints">
-          <thead><tr><th>Piece</th><th>Points</th></tr></thead>
+          <thead>
+  <tr><th>Piece</th><th>Symbol</th><th>Points</th></tr>
+</thead>
           <tbody id="helpPointsBody">
             <!-- Fallback (will be replaced by help.js if piecePoints is available) -->
             <tr><td>King</td><td>20</td></tr>
@@ -173,6 +179,7 @@
   <script src="help.js"></script>
 </body>
 </html>
+
 
 
 
