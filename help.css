@@ -1,0 +1,58 @@
+// Help overlay controls + optional dynamic points table
+(function wireHelp() {
+  const helpButton     = document.getElementById('helpButton');
+  const helpOverlay    = document.getElementById('helpOverlay');
+  const helpPanel      = document.getElementById('helpPanel');
+  const helpClose      = document.getElementById('helpClose');
+  const expandAllBtn   = document.getElementById('expandAll');
+  const collapseAllBtn = document.getElementById('collapseAll');
+
+  if (!helpButton || !helpOverlay || !helpPanel) return;
+
+  const openHelp = () => {
+    helpOverlay.classList.add('open');
+    helpOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeHelp = () => {
+    helpOverlay.classList.remove('open');
+    helpOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  helpButton.addEventListener('click', openHelp);
+  helpClose?.addEventListener('click', closeHelp);
+
+  // Click outside panel closes
+  helpOverlay.addEventListener('click', (e) => {
+    if (e.target === helpOverlay) closeHelp();
+  });
+
+  // ESC closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && helpOverlay.classList.contains('open')) closeHelp();
+  });
+
+  // Expand/Collapse all sections
+  expandAllBtn?.addEventListener('click', () => {
+    helpPanel.querySelectorAll('details').forEach(d => d.open = true);
+  });
+  collapseAllBtn?.addEventListener('click', () => {
+    helpPanel.querySelectorAll('details').forEach(d => d.open = false);
+  });
+
+  // (Optional) Populate the points table from the live game config if available
+  try {
+    const tblBody = document.getElementById('helpPointsBody');
+    if (tblBody && window.piecePoints && typeof window.piecePoints === 'object') {
+      const order = ['K','Q','R','B','N','A','W','P'];
+      const names = {K:'King (K)',Q:'Queen (Q)',R:'Rook (R)',B:'Bishop (B)',N:'Knight (N)',A:'Archer (A)',W:'Diplomat (W)',P:'Pawn (P)'};
+      tblBody.innerHTML = order.map(k => {
+        const v = window.piecePoints[k];
+        return `<tr><td>${names[k] ?? k}</td><td>${v}</td></tr>`;
+      }).join('');
+    }
+  } catch (e) {
+    // Silent fail: leave static table as-is
+  }
+})();
