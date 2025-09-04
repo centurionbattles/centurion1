@@ -13,7 +13,18 @@
 
     <div id="turnDisplay">Turn: <span id="turnSide">White</span> ⚪</div>
     <div id="timerDisplay">Time Left: <span id="timeLeft">30</span>s</div>
-
+    <section id="currentRoundBox">
+      <h3 class="panel-title">Current Round</h3>
+      <table id="currentRoundTable" class="bowling-table current-round-table big-score">
+        <thead>
+          <tr><th>Side</th><th>Points</th></tr>
+        </thead>
+        <tbody>
+          <tr id="crtRowBlack"><td>Black</td><td><span id="roundBlackPoints">0</span></td></tr>
+          <tr id="crtRowWhite"><td>White</td><td><span id="roundWhitePoints">0</span></td></tr>
+        </tbody>
+      </table>
+    </section>
     <div id="pointsDisplay">
       <div>Black Points: <span id="blackPoints">0</span></div>
       <div>White Points: <span id="whitePoints">0</span></div>
@@ -72,6 +83,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
