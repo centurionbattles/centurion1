@@ -31,30 +31,23 @@
     </tbody>
   </table>
 </section>
-    <div id="pointsDisplay">
-      <div>Black Points: <span id="blackPoints">0</span></div>
-      <div>White Points: <span id="whitePoints">0</span></div>
-    </div>
-
     <div id="roundDisplay">Round: <span id="roundNum">1</span></div>
 <!-- Total Score -->
-    <div id="totalScores" style="width:100%;">
-      <h3>Total Score</h3>
-      <table class="bowling-table">
-        <thead>
-          <tr>
-            <th>Black</th>
-            <th>White</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="totalBlackScore">0</td>
-            <td id="totalWhiteScore">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+   <div id="totalScores" style="width:100%;">
+  <h3>Total Score</h3>
+  <table id="totalScoreTable" class="bowling-table">
+    <tbody>
+      <tr id="totalRowBlack">
+        <td>Black</td>
+        <td id="totalBlackScore">0</td>
+      </tr>
+      <tr id="totalRowWhite">
+        <td>White</td>
+        <td id="totalWhiteScore">0</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
     <!-- Previous Rounds -->
     <div id="previousScores" style="width:100%;">
       <h3>Previous Rounds</h3>
@@ -89,6 +82,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
