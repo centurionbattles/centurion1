@@ -395,9 +395,9 @@ text-shadow:
 
 /* Optional: subtle round corners on whole rows */
 #totalRowBlack td:first-child,
-#totalRowWhite td:first-child { border-radius: 10px 0 0 10px; }
+#totalRowWhite td:first-child { border-radius: 0px 0 0 10px; }
 #totalRowBlack td:last-child,
-#totalRowWhite td:last-child  { border-radius: 0 10px 10px 0; }
+#totalRowWhite td:last-child  { border-radius: 0 0px 10px 0; }
 
 /* Mobile tweak */
 @media (max-width: 900px) {
