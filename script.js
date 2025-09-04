@@ -374,44 +374,44 @@ function updateRoundDisplay() {
 
 // Update points display
 function updatePointsDisplay() {
-  // existing small counters
+  // small counters
+  const prevBP = blackPointsDisplay.textContent;
+  const prevWP = whitePointsDisplay.textContent;
   blackPointsDisplay.textContent = blackPoints;
   whitePointsDisplay.textContent = whitePoints;
+  // (optional) animate small counters too
+  if (prevBP !== String(blackPoints)) {
+    blackPointsDisplay.classList.remove('bump'); void blackPointsDisplay.offsetWidth; blackPointsDisplay.classList.add('bump');
+  }
+  if (prevWP !== String(whitePoints)) {
+    whitePointsDisplay.classList.remove('bump'); void whitePointsDisplay.offsetWidth; whitePointsDisplay.classList.add('bump');
+  }
 
-  // write to the Current Round table
-  if (currentRoundBlackPoints) currentRoundBlackPoints.textContent = blackPoints;
-  if (currentRoundWhitePoints) currentRoundWhitePoints.textContent = whitePoints;
+  // current round table cells
+  const bCell = document.getElementById('currentRoundBlackPoints');
+  const wCell = document.getElementById('currentRoundWhitePoints');
+  if (bCell) {
+    const old = bCell.textContent;
+    bCell.textContent = blackPoints;
+    if (old !== String(blackPoints)) {
+      bCell.classList.remove('bump'); void bCell.offsetWidth; bCell.classList.add('bump');
+    }
+  }
+  if (wCell) {
+    const old = wCell.textContent;
+    wCell.textContent = whitePoints;
+    if (old !== String(whitePoints)) {
+      wCell.classList.remove('bump'); void wCell.offsetWidth; wCell.classList.add('bump');
+    }
+  }
 
-  // optional: leader highlight if you want it
+  // leader highlight (optional)
   const rowB = document.getElementById('currentRoundRowBlack');
   const rowW = document.getElementById('currentRoundRowWhite');
   if (rowB && rowW) {
     rowB.classList.toggle('leader', blackPoints > whitePoints);
     rowW.classList.toggle('leader', whitePoints > blackPoints);
   }
-}
-function animateNumber(cell, newValue) {
-  if (!cell) return;
-  const s = String(newValue);
-  if (cell.textContent === s) return;
-  cell.textContent = s;
-  cell.classList.remove('bump');
-  void cell.offsetWidth;            // reflow to restart animation
-  cell.classList.add('bump');
-}
-
-function updateCurrentRoundTable() {
-  const bCell = document.getElementById('roundBlackPoints');
-  const wCell = document.getElementById('roundWhitePoints');
-  const rowB  = document.getElementById('crtRowBlack');
-  const rowW  = document.getElementById('crtRowWhite');
-  if (!bCell || !wCell || !rowB || !rowW) return;
-
-  animateNumber(bCell, blackPoints);
-  animateNumber(wCell, whitePoints);
-
-  rowB.classList.toggle('leader', blackPoints > whitePoints);
-  rowW.classList.toggle('leader', whitePoints > blackPoints);
 }
 function updateTotalScoreDisplay() {
   const blackTotalCell = document.getElementById('totalBlackScore');
@@ -562,6 +562,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
