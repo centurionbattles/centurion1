@@ -1,102 +1,141 @@
-(() => {
-  const onReady = (fn) =>
-    (document.readyState !== 'loading')
-      ? fn()
-      : document.addEventListener('DOMContentLoaded', fn);
-
-  onReady(() => {
-    // ---- cache elements
-    const helpButton       = document.getElementById('helpButton');
-    const helpOverlay      = document.getElementById('helpOverlay');
-    const helpPanel        = document.getElementById('helpPanel');
-    const helpClose        = document.getElementById('helpClose');
-    const expandAllBtn     = document.getElementById('expandAll');
-    const collapseAllBtn   = document.getElementById('collapseAll');
-
-    if (!helpButton || !helpOverlay || !helpPanel) return;
-
-    // ---- open/close
-    const openHelp = () => {
-      helpOverlay.removeAttribute('hidden');
-      helpOverlay.classList.add('open');
-      helpOverlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      if (typeof window.hidePieceTooltip === 'function') window.hidePieceTooltip();
-    };
-
-    const closeHelp = () => {
-      helpOverlay.classList.remove('open');
-      helpOverlay.setAttribute('aria-hidden', 'true');
-      helpOverlay.setAttribute('hidden', '');
-      document.body.style.overflow = '';
-    };
-
-    helpButton.addEventListener('click', openHelp);
-    helpClose && helpClose.addEventListener('click', closeHelp);
-    helpOverlay.addEventListener('click', (e) => { if (e.target === helpOverlay) closeHelp(); });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && helpOverlay.classList.contains('open')) closeHelp();
-    });
-
-    // ---- expand/collapse all
-    expandAllBtn && expandAllBtn.addEventListener('click', () => {
-      helpPanel.querySelectorAll('details').forEach(d => d.open = true);
-    });
-    collapseAllBtn && collapseAllBtn.addEventListener('click', () => {
-      helpPanel.querySelectorAll('details').forEach(d => d.open = false);
-    });
-
-    // ---- data dicts
-    const NAMES = { K:'King', Q:'Queen', R:'Rook', B:'Bishop', N:'Knight', A:'Archer', W:'Diplomat', P:'Pawn' };
-    const MOVES = {
-      P:'Forward 1 (2 from start); diagonal capture; promotes on last rank.',
-      R:'Any squares orthogonally; cannot jump.',
-      N:'L-shape (2+1); can jump.',
-      B:'Any squares diagonally; cannot jump.',
-      Q:'Rook + Bishop moves.',
-      K:'1 square in any direction.',
-      A:'Exactly 2 squares in any direction; can jump.',
-      W:'1 square any direction; can convert adjacent enemy (not King).'
-    };
-    const FALLBACK_SYM = { P:'♟', R:'♜', N:'♞', B:'♝', Q:'♛', K:'♚', A:'ᕕ', W:'ษ' };
-    const sym = (k) => (window.piecesUnicode?.[k] || FALLBACK_SYM[k] || k);
-    const ORDER = ['K','Q','R','B','N','A','W','P'];
-
-    // ---- renderers
-    function fillPointsTable() {
-      const body = document.getElementById('helpPointsBody');
-      if (!body) return;
-      const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
-      body.innerHTML = ORDER.map(k => (
-        `<tr>
-          <td>${NAMES[k]}</td>
-          <td class="sym">${sym(k)}</td>
-          <td>${pp[k] ?? ''}</td>
-        </tr>`
-      )).join('');
-    }
-
-    function fillPiecesGrid() {
-      const host = document.getElementById('helpPiecesGrid');
-      if (!host) return;
-      const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
-      host.innerHTML = ORDER.map(k => (
-        `<div class="piece-card">
-          <div class="piece-sigil">${sym(k)}</div>
-          <div>
-            <div class="piece-name">${NAMES[k]}</div>
-            <div class="piece-moves">${MOVES[k]}</div>
-            <div class="piece-points">${pp[k]} points</div>
-          </div>
-        </div>`
-      )).join('');
-    }
-
-    // ---- build UI
-    try { fillPointsTable(); fillPiecesGrid(); } catch (e) { /* keep static fallback */ }
-
-    // expose helpers for console testing
-    window.openHelp = openHelp;
-    window.closeHelp = closeHelp;
-  });
-})();
+(() => {                                                                 // [L001]
+  const onReady = (fn) =>                                                // [L002]
+    (document.readyState !== 'loading') ? fn()                           // [L003]
+      : document.addEventListener('DOMContentLoaded', fn);               // [L004]
+                                                                          // [L005]
+  onReady(() => {                                                         // [L006]
+    // ---- cache elements ----                                           // [L007]
+    const helpButton     = document.getElementById('helpButton');        // [L008]
+    const helpOverlay    = document.getElementById('helpOverlay');       // [L009]
+    const helpPanel      = document.getElementById('helpPanel');         // [L010]
+    const helpClose      = document.getElementById('helpClose');         // [L011]
+    const expandAllBtn   = document.getElementById('expandAll');         // [L012]
+    const collapseAllBtn = document.getElementById('collapseAll');       // [L013]
+                                                                          // [L014]
+    // NEW: floating scroll buttons                                       // [L015]
+    const scrollDownBtn  = document.getElementById('helpScrollDown');    // [L016]
+    const scrollTopBtn   = document.getElementById('helpScrollTop');     // [L017]
+                                                                          // [L018]
+    if (!helpButton || !helpOverlay || !helpPanel) return;               // [L019]
+                                                                          // [L020]
+    // ---- open/close ----                                               // [L021]
+    const openHelp = () => {                                             // [L022]
+      helpOverlay.removeAttribute('hidden');                              // [L023]
+      helpOverlay.classList.add('open');                                  // [L024]
+      helpOverlay.setAttribute('aria-hidden', 'false');                   // [L025]
+      document.body.style.overflow = 'hidden';                            // [L026]
+      if (typeof window.hidePieceTooltip === 'function')                  // [L027]
+        window.hidePieceTooltip();                                        // [L028]
+      // After layout, update FAB visibility                              // [L029]
+      requestAnimationFrame(updateHelpFabs);                              // [L030]
+    };                                                                    // [L031]
+                                                                          // [L032]
+    const closeHelp = () => {                                             // [L033]
+      helpOverlay.classList.remove('open');                               // [L034]
+      helpOverlay.setAttribute('aria-hidden', 'true');                    // [L035]
+      helpOverlay.setAttribute('hidden', '');                             // [L036]
+      document.body.style.overflow = '';                                  // [L037]
+    };                                                                    // [L038]
+                                                                          // [L039]
+    // ---- wire controls ----                                            // [L040]
+    helpButton.addEventListener('click', openHelp);                       // [L041]
+    helpClose && helpClose.addEventListener('click', closeHelp);          // [L042]
+    helpOverlay.addEventListener('click', (e) => {                        // [L043]
+      if (e.target === helpOverlay) closeHelp();                          // [L044]
+    });                                                                   // [L045]
+    document.addEventListener('keydown', (e) => {                         // [L046]
+      if (e.key === 'Escape' && helpOverlay.classList.contains('open'))   // [L047]
+        closeHelp();                                                      // [L048]
+    });                                                                   // [L049]
+                                                                          // [L050]
+    // ---- expand/collapse all ----                                      // [L051]
+    expandAllBtn && expandAllBtn.addEventListener('click', () => {        // [L052]
+      helpPanel.querySelectorAll('details').forEach(d => d.open = true);  // [L053]
+    });                                                                   // [L054]
+    collapseAllBtn && collapseAllBtn.addEventListener('click', () => {    // [L055]
+      helpPanel.querySelectorAll('details').forEach(d => d.open = false); // [L056]
+    });                                                                   // [L057]
+                                                                          // [L058]
+    // ---- floating scroll buttons ----                                  // [L059]
+    function scrollHelpToTop() {                                          // [L060]
+      helpPanel.scrollTo({ top: 0, behavior: 'smooth' });                 // [L061]
+    }                                                                     // [L062]
+    function scrollHelpToBottom() {                                       // [L063]
+      helpPanel.scrollTo({ top: helpPanel.scrollHeight,                   // [L064]
+                           behavior: 'smooth' });                         // [L065]
+    }                                                                     // [L066]
+    function updateHelpFabs() {                                           // [L067]
+      const nearTop = helpPanel.scrollTop <= 20;                          // [L068]
+      const nearBottom = Math.ceil(helpPanel.scrollTop +                  // [L069]
+        helpPanel.clientHeight) >= helpPanel.scrollHeight - 4;            // [L070]
+      if (scrollTopBtn)  scrollTopBtn.style.display  = nearTop ? 'none' : '';     // [L071]
+      if (scrollDownBtn) scrollDownBtn.style.display = nearBottom ? 'none' : '';  // [L072]
+    }                                                                     // [L073]
+    // Wire FABs (if present)                                             // [L074]
+    scrollTopBtn  && scrollTopBtn.addEventListener('click', (e) => {      // [L075]
+      e.stopPropagation(); scrollHelpToTop();                              // [L076]
+    });                                                                   // [L077]
+    scrollDownBtn && scrollDownBtn.addEventListener('click', (e) => {     // [L078]
+      e.stopPropagation(); scrollHelpToBottom();                           // [L079]
+    });                                                                   // [L080]
+    helpPanel.addEventListener('scroll', updateHelpFabs);                 // [L081]
+                                                                          // [L082]
+    // ---- data dicts (names, moves, symbols) ----                       // [L083]
+    const NAMES = { K:'King', Q:'Queen', R:'Rook', B:'Bishop',            // [L084]
+      N:'Knight', A:'Archer', W:'Diplomat', P:'Pawn' };                   // [L085]
+    const MOVES = {                                                       // [L086]
+      P:'Forward 1 (2 from start); diagonal capture; promotes on last rank.', // [L087]
+      R:'Any squares orthogonally; cannot jump.',                         // [L088]
+      N:'L-shape (2+1); can jump.',                                       // [L089]
+      B:'Any squares diagonally; cannot jump.',                           // [L090]
+      Q:'Rook + Bishop moves.',                                           // [L091]
+      K:'1 square in any direction.',                                     // [L092]
+      A:'Exactly 2 squares in any direction; can jump.',                  // [L093]
+      W:'1 square any direction; can convert adjacent enemy (not King).'  // [L094]
+    };                                                                    // [L095]
+    const FALLBACK_SYM = { P:'♟', R:'♜', N:'♞', B:'♝',                    // [L096]
+      Q:'♛', K:'♚', A:'ᕕ', W:'ษ' };                                      // [L097]
+    const sym = (k) => (window.piecesUnicode?.[k] ||                      // [L098]
+                        FALLBACK_SYM[k] || k);                             // [L099]
+    const ORDER = ['K','Q','R','B','N','A','W','P'];                      // [L100]
+                                                                          // [L101]
+    // ---- renderers ----                                                // [L102]
+    function fillPointsTable() {                                          // [L103]
+      const body = document.getElementById('helpPointsBody');             // [L104]
+      if (!body) return;                                                  // [L105]
+      const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1}; // [L106]
+      body.innerHTML = ORDER.map(k => (                                   // [L107]
+        `<tr>                                                              
+          <td>${NAMES[k]}</td>                                            
+          <td class="sym">${sym(k)}</td>                                  
+          <td>${pp[k] ?? ''}</td>                                         
+        </tr>`                                                            // [L108]
+      )).join('');                                                        // [L109]
+    }                                                                     // [L110]
+                                                                          // [L111]
+    function fillPiecesGrid() {                                           // [L112]
+      const host = document.getElementById('helpPiecesGrid');             // [L113]
+      if (!host) return;                                                  // [L114]
+      const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1}; // [L115]
+      host.innerHTML = ORDER.map(k => (                                   // [L116]
+        `<div class="piece-card">                                        
+           <div class="piece-sigil">${sym(k)}</div>                       
+           <div>                                                          
+             <div class="piece-name">${NAMES[k]}</div>                    
+             <div class="piece-moves">${MOVES[k]}</div>                   
+             <div class="piece-points">${pp[k]} points</div>              
+           </div>                                                         
+         </div>`                                                          
+      )).join('');                                                        // [L117]
+    }                                                                     // [L118]
+                                                                          // [L119]
+    try {                                                                 // [L120]
+      fillPointsTable();                                                  // [L121]
+      fillPiecesGrid();                                                   // [L122]
+    } catch (e) { /* leave static fallback */ }                           // [L123]
+                                                                          // [L124]
+    // expose for console testing                                         // [L125]
+    window.openHelp = openHelp;                                           // [L126]
+    window.closeHelp = closeHelp;                                         // [L127]
+  });                                                                     // [L128]
+})();                                                                     // [L129]
