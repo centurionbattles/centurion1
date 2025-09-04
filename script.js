@@ -345,6 +345,20 @@ function showPromotionModal(r, c){
     promotionOptions.appendChild(btn);
   });
 }
+function pop(el) {
+  if (!el) return;
+  // ensure it can scale
+  el.style.display = 'inline-block';
+  // run a quick pop animation
+  el.animate(
+    [
+      { transform: 'scale(1)' },
+      { transform: 'scale(1.18)' },
+      { transform: 'scale(1)' }
+    ],
+    { duration: 240, easing: 'ease-out' }
+  );
+}
 function updateCurrentRoundTable() {
   const bCell = document.getElementById('currentRoundBlackPoints');
   const wCell = document.getElementById('currentRoundWhitePoints');
@@ -562,6 +576,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
