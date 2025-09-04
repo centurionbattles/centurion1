@@ -420,22 +420,20 @@ function startTimer() {
   timeLeft = moveTimeSeconds;
 
   if (timerDisplay) {
-    timerDisplay.textContent = `Time Left: ${timeLeft}s`;
-    // reset warning/flash
-    timerDisplay.classList.remove('timer-warning', 'timer-flash');
-    // ensure correct theme at (re)start
-    timerDisplay.classList.remove('timer-black', 'timer-white');
+    // reset warning/flash and ensure theme
+    timerDisplay.classList.remove('timer-warning', 'timer-flash', 'timer-black', 'timer-white');
     timerDisplay.classList.add(currentPlayer === 1 ? 'timer-black' : 'timer-white');
   }
+  if (timeLeftSpan) timeLeftSpan.textContent = timeLeft;
 
   clearInterval(timerId);
   timerId = setInterval(() => {
     timeLeft--;
 
-    if (timerDisplay) {
-      timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+    if (timeLeftSpan) timeLeftSpan.textContent = timeLeft;
 
-      // Under 10 seconds: red text + flash, keep themed background
+    if (timerDisplay) {
+      // Under 10 seconds: red text + flash, background stays themed
       if (timeLeft <= 10 && timeLeft > 0) {
         timerDisplay.classList.add('timer-warning', 'timer-flash');
       } else {
@@ -537,6 +535,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
