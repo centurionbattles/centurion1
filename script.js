@@ -422,31 +422,6 @@ function updatePointsDisplay() {
   setAndPop(totalWhiteCell, whiteTotalScore + whitePoints);
 }
 
-  // current round table cells
-  const bCell = document.getElementById('currentRoundBlackPoints');
-  const wCell = document.getElementById('currentRoundWhitePoints');
-  if (bCell) {
-    if (bCell.textContent !== String(blackPoints)) {
-      bCell.textContent = blackPoints;
-      pop(bCell);
-    }
-  }
-  if (wCell) {
-    if (wCell.textContent !== String(whitePoints)) {
-      wCell.textContent = whitePoints;
-      pop(wCell);
-    }
-  }
-
-  // optional leader highlight (keeps your current styles)
-  const rowB  = document.getElementById('currentRoundRowBlack');
-  const rowW  = document.getElementById('currentRoundRowWhite');
-  if (rowB && rowW) {
-    rowB.classList.toggle('leader', blackPoints > whitePoints);
-    rowW.classList.toggle('leader', whitePoints > blackPoints);
-  }
-}
-
 function updateTotalScoreDisplay() {
   const blackTotalCell = document.getElementById('totalBlackScore');
   const whiteTotalCell = document.getElementById('totalWhiteScore');
@@ -602,6 +577,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
