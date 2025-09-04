@@ -374,9 +374,21 @@ function updateRoundDisplay() {
 
 // Update points display
 function updatePointsDisplay() {
+  // existing small counters
   blackPointsDisplay.textContent = blackPoints;
   whitePointsDisplay.textContent = whitePoints;
-  updateCurrentRoundTable();          // add this
+
+  // write to the Current Round table
+  if (currentRoundBlackPoints) currentRoundBlackPoints.textContent = blackPoints;
+  if (currentRoundWhitePoints) currentRoundWhitePoints.textContent = whitePoints;
+
+  // optional: leader highlight if you want it
+  const rowB = document.getElementById('currentRoundRowBlack');
+  const rowW = document.getElementById('currentRoundRowWhite');
+  if (rowB && rowW) {
+    rowB.classList.toggle('leader', blackPoints > whitePoints);
+    rowW.classList.toggle('leader', whitePoints > blackPoints);
+  }
 }
 function animateNumber(cell, newValue) {
   if (!cell) return;
@@ -550,6 +562,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
