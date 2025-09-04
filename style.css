@@ -173,6 +173,53 @@ body {
 .panel-title { margin: 0 0 .5em; color: #fff; 
              }
 
+/* Total Score: side-by-side cards (no borders) */
+.total-score-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.total-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+/* Themes */
+.total-black { background: #000; color: #f5eec2; }  /* cream on black */
+.total-white { background: #fff; color: #666; }     /* grey on white */
+
+.total-card .label {
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* Big, stable numbers (no shape shift) */
+.total-card .value {
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: .5px;
+  min-width: 5ch;      /* reserve width so 10→9 doesn’t wiggle */
+  text-align: right;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.45),
+    0 0 6px rgba(0,0,0,.25);
+}
+
+/* Stack on small screens */
+@media (max-width: 900px) {
+  .total-score-wrap { grid-template-columns: 1fr; }
+  .total-card .value { font-size: 2rem; }
+}
+
 /* Score/round tables */
 .bowling-table {
   width: 100%;
