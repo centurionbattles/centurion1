@@ -377,19 +377,28 @@ function addPointsForCapture(capturedPiece) {
 function startTimer() {
   timeLeft = moveTimeSeconds;
 
+  clearInterval(timerId);
+
   if (timerDisplay) {
+    // Force the bigger look even if CSS didn’t load yet
     timerDisplay.textContent = `Time Left: ${timeLeft}s`;
-    timerDisplay.classList.remove('timer-warning', 'timer-flash'); // reset visuals
+    timerDisplay.classList.remove('timer-warning', 'timer-flash');
+    timerDisplay.style.fontSize = '2.6rem';
+    timerDisplay.style.fontWeight = '900';
+    timerDisplay.style.backgroundColor = '#111';
+    timerDisplay.style.color = '#d5c5c5';
+    timerDisplay.style.padding = '0.25em 0.7em';
+    timerDisplay.style.borderRadius = '0.6em';
+    timerDisplay.style.display = 'inline-block';
   }
 
-  clearInterval(timerId);
   timerId = setInterval(() => {
     timeLeft--;
 
     if (timerDisplay) {
       timerDisplay.textContent = `Time Left: ${timeLeft}s`;
 
-      // Under 10 seconds: turn red and flash
+      // Under 10 seconds: turn red & flash
       if (timeLeft <= 10 && timeLeft > 0) {
         timerDisplay.classList.add('timer-warning', 'timer-flash');
       } else {
@@ -491,6 +500,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
