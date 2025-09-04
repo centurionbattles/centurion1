@@ -4,7 +4,8 @@ const boardElement = document.getElementById('board');
 const turnDisplay = document.getElementById('turnDisplay');
 const promotionModal = document.getElementById('promotionModal');
 const promotionOptions = document.getElementById('promotionOptions');
-
+const turnSideSpan = document.getElementById('turnSide');
+const timeLeftSpan = document.getElementById('timeLeft');
 const boardSize = 10;
 
 let board = [];
@@ -534,6 +535,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
