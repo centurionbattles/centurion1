@@ -358,8 +358,31 @@ function updateRoundDisplay() {
 function updatePointsDisplay() {
   blackPointsDisplay.textContent = blackPoints;
   whitePointsDisplay.textContent = whitePoints;
+  updateCurrentRoundTable();          // add this
+}
+function animateNumber(cell, newValue) {
+  if (!cell) return;
+  const s = String(newValue);
+  if (cell.textContent === s) return;
+  cell.textContent = s;
+  cell.classList.remove('bump');
+  void cell.offsetWidth;            // reflow to restart animation
+  cell.classList.add('bump');
 }
 
+function updateCurrentRoundTable() {
+  const bCell = document.getElementById('roundBlackPoints');
+  const wCell = document.getElementById('roundWhitePoints');
+  const rowB  = document.getElementById('crtRowBlack');
+  const rowW  = document.getElementById('crtRowWhite');
+  if (!bCell || !wCell || !rowB || !rowW) return;
+
+  animateNumber(bCell, blackPoints);
+  animateNumber(wCell, whitePoints);
+
+  rowB.classList.toggle('leader', blackPoints > whitePoints);
+  rowW.classList.toggle('leader', whitePoints > blackPoints);
+}
 function updateTotalScoreDisplay() {
   const blackTotalCell = document.getElementById('totalBlackScore');
   const whiteTotalCell = document.getElementById('totalWhiteScore');
@@ -511,6 +534,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
