@@ -60,7 +60,6 @@ body {
   font-size: 1.4em;
   margin-bottom: .4em;
 }
-/* Bigger, prominent timer */
 /* === Timer (prominent + warning) === */
 #timerDisplay {
   font-size: 2.6rem !important;
@@ -69,17 +68,28 @@ body {
   letter-spacing: 0.5px !important;
   padding: 0.25em 0.7em !important;
   border-radius: 0.6em !important;
-  background: #111 !important;
-  color: #d5c5c5 !important;
+  background: #111 !important;   /* neutral default */
+  color: #d5c5c5 !important;      /* neutral default */
   box-shadow: 0 6px 24px rgba(0,0,0,.4) !important;
   text-align: center !important;
   display: inline-block !important;
   transition: color .25s, background-color .25s, transform .25s, opacity .25s !important;
 }
 
+/* Theme by side (apply one of these classes from JS) */
+#timerDisplay.timer-black {
+  background: #000 !important;
+  color: #f5eec2 !important;   /* cream */
+}
+#timerDisplay.timer-white {
+  background: #fff !important;
+  color: #666 !important;      /* grey */
+}
+
+/* Under 10s: text turns red (keep themed background) */
 #timerDisplay.timer-warning {
   color: #ff3b30 !important;
-  background: #1a0000 !important;
+  /* no background change here so theme remains visible */
 }
 
 #timerDisplay.timer-flash {
