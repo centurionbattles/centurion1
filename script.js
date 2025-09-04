@@ -372,7 +372,17 @@ function addPointsForCapture(capturedPiece) {
   }
   updatePointsDisplay();
 }
-
+function applyTimerTheme() {
+  if (!timerDisplay) return;
+  timerDisplay.classList.remove('timer-black', 'timer-white');
+  if (currentPlayer === 1) {
+    // Player 1 = Black
+    timerDisplay.classList.add('timer-black');
+  } else {
+    // Player 2 = White
+    timerDisplay.classList.add('timer-white');
+  }
+}
 // Move timer
 function startTimer() {
   timeLeft = moveTimeSeconds;
@@ -492,6 +502,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
