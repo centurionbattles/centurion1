@@ -62,18 +62,37 @@ body {
 }
 /* === Timer (prominent + warning) === */
 #timerDisplay {
-  font-size: 2.6rem !important;
-  line-height: 1 !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.5px !important;
+  /* original chrome preserved */
   padding: 0.25em 0.7em !important;
   border-radius: 0.6em !important;
-  background: #111 !important;   /* neutral default */
-  color: #d5c5c5 !important;      /* neutral default */
   box-shadow: 0 6px 24px rgba(0,0,0,.4) !important;
-  text-align: center !important;
-  display: inline-block !important;
   transition: color .25s, background-color .25s, transform .25s, opacity .25s !important;
+
+  /* layout & text */
+  display: inline-flex !important;   /* align label + number nicely */
+  align-items: baseline;
+  gap: .25em;
+  line-height: 1 !important;
+  text-align: center !important;
+
+  /* label style (shrunk) */
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+
+  /* neutral defaults (overridden by theme classes below) */
+  background: #111 !important;
+  color: #d5c5c5 !important;
+}
+
+/* Big number only */
+#timeLeft {
+  display: inline-block;
+  font-size: 2.6rem !important;      /* big number */
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+  margin: 0 .15em;
 }
 
 /* Theme by side (apply one of these classes from JS) */
