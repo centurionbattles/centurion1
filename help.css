@@ -56,3 +56,25 @@
     // Silent fail: leave static table as-is
   }
 })();
+/* Hidden by default (also respects the HTML [hidden] attribute) */
+#helpOverlay[hidden] {
+  display: none !important;
+}
+
+/* Use opacity/visibility so it can fade if you add transitions later */
+#helpOverlay {
+  display: block;              /* explicit, so [hidden] controls visibility */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+}
+
+#helpOverlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
