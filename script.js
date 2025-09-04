@@ -376,11 +376,27 @@ function addPointsForCapture(capturedPiece) {
 // Move timer
 function startTimer() {
   timeLeft = moveTimeSeconds;
-  timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+
+  if (timerDisplay) {
+    timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+    timerDisplay.classList.remove('timer-warning', 'timer-flash'); // reset visuals
+  }
+
   clearInterval(timerId);
   timerId = setInterval(() => {
     timeLeft--;
-    timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+
+    if (timerDisplay) {
+      timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+
+      // Under 10 seconds: turn red and flash
+      if (timeLeft <= 10 && timeLeft > 0) {
+        timerDisplay.classList.add('timer-warning', 'timer-flash');
+      } else {
+        timerDisplay.classList.remove('timer-warning', 'timer-flash');
+      }
+    }
+
     if (timeLeft <= 0) {
       clearInterval(timerId);
       alert(`Time's up! Player ${currentPlayer === 1 ? 'Black' : 'White'} loses turn.`);
@@ -391,6 +407,7 @@ function startTimer() {
     }
   }, 1000);
 }
+
 
 function resetTimer(){
   clearInterval(timerId);
@@ -474,6 +491,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
