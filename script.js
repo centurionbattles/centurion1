@@ -124,64 +124,60 @@ function renderBoard() {
 function onSquareClick(r, c) {
   const clickedPiece = board[r][c];
 
-  // No piece selected: select if own piece
+  // If no piece selected yet
   if (!selectedPiece) {
     if (clickedPiece && clickedPiece.player === currentPlayer) {
-      selectPiece(r, c, clickedPiece);
+      selectedPiece = { r, c, piece: clickedPiece };
+      validMoves = getValidMoves(r, c);
+      renderBoard();
     }
     return;
   }
 
-  // Diplomat special conversion
-  if (selectedPiece.piece.type === 'W' && canConvertWithDiplomat(selectedPiece, r, c)) {
-    convertWithDiplomat(r, c);
-    return;
+  // Diplomat conversion: adjacent enemy (not king), diplomat does not move
+  if (selectedPiece.piece.type === 'W') {
+    const dr = Math.abs(r - selectedPiece.r);
+    const dc = Math.abs(c - selectedPiece.c);
+    const target = board[r][c];
+
+    if (dr <= 1 && dc <= 1 && target && target.player !== currentPlayer && target.type !== 'K') {
+      // Award points to the converter, BEFORE flipping ownership
+      addPointsForCapture(target);
+
+      // Convert ownership
+      board[r][c].player = currentPlayer;
+
+      // Clean up and advance turn (resets timer)
+      selectedPiece = null;
+      validMoves = [];
+      updatePointsDisplay();
+      switchPlayer();
+      renderBoard();
+      return;
+    }
   }
 
-  // Valid move: move piece
-  if (isValidMove(r, c)) {
+  // Normal move to a valid square
+  if (validMoves.some(m => m[0] === r && m[1] === c)) {
     movePiece(selectedPiece.r, selectedPiece.c, r, c);
-    clearSelection();
+    selectedPiece = null;
+    validMoves = [];
     renderBoard();
     return;
   }
 
-  // Reselect if own piece
+  // Clicked another own piece => reselect
   if (clickedPiece && clickedPiece.player === currentPlayer) {
-    selectPiece(r, c, clickedPiece);
+    selectedPiece = { r, c, piece: clickedPiece };
+    validMoves = getValidMoves(r, c);
+    renderBoard();
     return;
   }
 
   // Otherwise, deselect
-  clearSelection();
-  renderBoard();
-}
-
-function selectPiece(r, c, piece) {
-  selectedPiece = { r, c, piece };
-  validMoves = getValidMoves(r, c);
-  renderBoard();
-}
-
-function clearSelection() {
   selectedPiece = null;
   validMoves = [];
-}
-
-function isValidMove(r, c) {
-  return validMoves.some(m => m[0] === r && m[1] === c);
-}
-
-function canConvertWithDiplomat(selected, r, c) {
-  const dr = Math.abs(r - selected.r);
-  const dc = Math.abs(c - selected.c);
-  const target = board[r][c];
-  return (
-    selected.piece.type === 'W' &&
-    dr <= 1 && dc <= 1 &&
-    target && target.player !== currentPlayer &&
-    target.type !== 'K'
-  );
+  renderBoard();
 }
 
 function convertWithDiplomat(r, c) {
@@ -533,6 +529,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
