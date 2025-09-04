@@ -342,7 +342,67 @@ text-shadow:
   35%  { transform: scale(1.18); }
   100% { transform: scale(1); }
 }
+/* === Total Score: row-based, no borders, themed rows, big numbers === */
+#totalScoreTable {
+  border: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  border-collapse: separate;   /* avoid accidental collapsing effects */
+  border-spacing: 0 10px;      /* nice vertical breathing room */
+}
 
+#totalScoreTable thead { display: none; }        /* we don't need a header */
+#totalScoreTable th,
+#totalScoreTable td { border: none !important; }
+
+/* Row themes */
+#totalRowBlack td {
+  background: #000 !important;
+  color: #f5eec2 !important;   /* cream */
+}
+#totalRowWhite td {
+  background: #fff !important;
+  color: #666 !important;      /* grey */
+}
+
+/* Cell padding & layout */
+#totalScoreTable tbody td {
+  padding: 12px 14px;
+}
+
+/* First column: label */
+#totalScoreTable tbody td:first-child {
+  width: 50%;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* Second column: BIG numbers, stable width (no wiggle) */
+#totalScoreTable tbody td:nth-child(2) {
+  text-align: right;
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: .5px;
+  min-width: 5ch;              /* reserve space to avoid shape shift */
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.45),
+    0 0 6px rgba(0,0,0,.25);
+  border-radius: 10px;         /* matches the row feel */
+}
+
+/* Optional: subtle round corners on whole rows */
+#totalRowBlack td:first-child,
+#totalRowWhite td:first-child { border-radius: 10px 0 0 10px; }
+#totalRowBlack td:last-child,
+#totalRowWhite td:last-child  { border-radius: 0 10px 10px 0; }
+
+/* Mobile tweak */
+@media (max-width: 900px) {
+  #totalScoreTable tbody td:nth-child(2) { font-size: 2rem; }
+}
 @media (max-width: 900px) {
   body { flex-direction: column; align-items: stretch; }
   #sidePanel {
