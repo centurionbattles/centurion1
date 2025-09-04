@@ -1,66 +1,7 @@
-// Help overlay controls + optional dynamic points table
-(function wireHelp() {
-  const helpButton     = document.getElementById('helpButton');
-  const helpOverlay    = document.getElementById('helpOverlay');
-  const helpPanel      = document.getElementById('helpPanel');
-  const helpClose      = document.getElementById('helpClose');
-  const expandAllBtn   = document.getElementById('expandAll');
-  const collapseAllBtn = document.getElementById('collapseAll');
+/* =========================
+   HELP OVERLAY STYLES
+   ========================= */
 
-  if (!helpButton || !helpOverlay || !helpPanel) return;
-
-  const openHelp = () => {
-    helpOverlay.classList.add('open');
-    helpOverlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  };
-  const closeHelp = () => {
-    helpOverlay.classList.remove('open');
-    helpOverlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
-
-  helpButton.addEventListener('click', openHelp);
-  helpClose?.addEventListener('click', closeHelp);
-
-  // Click outside panel closes
-  helpOverlay.addEventListener('click', (e) => {
-    if (e.target === helpOverlay) closeHelp();
-  });
-
-  // ESC closes
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && helpOverlay.classList.contains('open')) closeHelp();
-  });
-
-  // Expand/Collapse all sections
-  expandAllBtn?.addEventListener('click', () => {
-    helpPanel.querySelectorAll('details').forEach(d => d.open = true);
-  });
-  collapseAllBtn?.addEventListener('click', () => {
-    helpPanel.querySelectorAll('details').forEach(d => d.open = false);
-  });
-
-  // (Optional) Populate the points table from the live game config if available
-  try {
-    const tblBody = document.getElementById('helpPointsBody');
-    if (tblBody && window.piecePoints && typeof window.piecePoints === 'object') {
-      const order = ['K','Q','R','B','N','A','W','P'];
-      const names = {K:'King (K)',Q:'Queen (Q)',R:'Rook (R)',B:'Bishop (B)',N:'Knight (N)',A:'Archer (A)',W:'Diplomat (W)',P:'Pawn (P)'};
-      tblBody.innerHTML = order.map(k => {
-        const v = window.piecePoints[k];
-        return `<tr><td>${names[k] ?? k}</td><td>${v}</td></tr>`;
-      }).join('');
-    }
-  } catch (e) {
-    // Silent fail: leave static table as-is
-  }
-})();
-/* Hidden by default (also respects the HTML [hidden] attribute) */
-#helpOverlay[hidden] {
-  display: none !important;
-}
-/* ---------- Help styling upgrades ---------- */
 :root {
   --help-font: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
   --help-fg: #111;
@@ -82,13 +23,99 @@
   }
 }
 
+/* Overlay itself */
+#helpOverlay {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+}
+#helpOverlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+#helpOverlay[hidden] {
+  display: none !important;
+}
+
+/* Panel */
 #helpPanel {
   font-family: var(--help-font);
   background: var(--help-bg);
   color: var(--help-fg);
+  max-width: 820px;
+  max-height: 90vh;
+  margin: 5vh auto;
+  padding: 28px 28px 36px;
+  border-radius: 16px;
+  overflow-y: auto;
+  border: 1px solid color-mix(in oklab, var(--acc-border), transparent 20%);
+  box-shadow: 0 24px 80px rgba(0,0,0,.45);
+  backdrop-filter: saturate(140%) blur(6px);
+  position: relative;
 }
 
-/* Nicer, high-contrast dropdowns */
+/* Headings */
+#helpPanel h2 {
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 1.9rem);
+  font-weight: 900;
+  margin: 0 0 .6rem 0;
+}
+#helpPanel h3 {
+  font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem);
+  font-weight: 800;
+  margin: .8rem 0 .45rem;
+}
+
+/* Close button (top-right) */
+.help-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .15s ease, transform .15s ease;
+}
+.help-close:hover {
+  background: color-mix(in oklab, currentColor, transparent 85%);
+}
+.help-close:active {
+  transform: scale(.95);
+}
+
+/* Expand/Collapse controls */
+.helpControls {
+  display: flex;
+  gap: .6rem;
+  margin: .6rem 0 .8rem;
+  flex-wrap: wrap;
+}
+.helpControls > button {
+  padding: .45rem .8rem;
+  border-radius: .6rem;
+  border: 1px solid var(--acc-border);
+  background: color-mix(in oklab, var(--acc-bg), white 4%);
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.helpControls > button:hover {
+  box-shadow: 0 6px 14px rgba(0,0,0,.18);
+}
+
+/* Accordion */
 .helpContent details {
   background: var(--acc-bg);
   border: 1px solid var(--acc-border);
@@ -105,7 +132,6 @@
   color: var(--acc-header-fg);
   list-style: none;
   position: relative;
-  user-select: none;
 }
 .helpContent summary::-webkit-details-marker { display: none; }
 .helpContent summary::after {
@@ -117,11 +143,14 @@
 .helpContent details[open] summary::after { transform: rotate(90deg); }
 .helpContent details > *:not(summary) { padding: .75rem .9rem .9rem; }
 
-/* Points table with symbol column */
+/* Points table */
 .helpPoints {
   width: 100%;
   border-collapse: collapse;
   font-size: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: .8rem;
 }
 .helpPoints th, .helpPoints td {
   border: 1px solid var(--acc-border);
@@ -130,24 +159,19 @@
 .helpPoints thead th {
   background: var(--acc-header-bg);
   color: var(--acc-header-fg);
-  border-color: var(--acc-header-bg);
+  font-weight: 700;
 }
 .helpPoints .sym {
   text-align: center;
   font-size: 1.4rem;
-  line-height: 1;
 }
 
-/* Pieces gallery grid */
+/* Pieces grid */
 .pieces-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 14px;
 }
-@media (min-width: 820px) {
-  .pieces-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
-}
-
 .piece-card {
   display: grid;
   grid-template-columns: 48px 1fr;
@@ -157,31 +181,46 @@
   border: 1px solid var(--acc-border);
   border-radius: 12px;
   padding: 10px 12px;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.piece-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0,0,0,.16);
 }
 .piece-sigil {
   font-size: 2.2rem;
   line-height: 1;
   text-align: center;
-  text-shadow: 0 1px 0 rgba(0,0,0,.25);
 }
-.piece-name { font-weight: 900; letter-spacing: .2px; }
-.piece-moves { font-size: .95rem; opacity: .9; }
+.piece-name { font-weight: 900; margin-bottom: 2px; }
+.piece-moves { font-size: .95rem; opacity: .9; line-height: 1.35; }
 .piece-points { font-weight: 900; margin-top: 4px; }
 
-/* Use opacity/visibility so it can fade if you add transitions later */
-#helpOverlay {
-  display: block;              /* explicit, so [hidden] controls visibility */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  z-index: 1000;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.85);
+/* Scrollbars */
+#helpPanel {
+  scrollbar-width: thin;
+  scrollbar-color: var(--acc-header-fg) var(--acc-bg);
+}
+#helpPanel::-webkit-scrollbar { width: 10px; }
+#helpPanel::-webkit-scrollbar-track { background: var(--acc-bg); }
+#helpPanel::-webkit-scrollbar-thumb {
+  background: var(--acc-header-fg);
+  border-radius: 10px;
 }
 
-#helpOverlay.open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+/* Mobile fixes */
+@media (max-width: 680px) {
+  #helpPanel {
+    width: 92vw;
+    max-height: 92vh;
+    padding: 20px 16px 28px;
+    border-radius: 12px;
+  }
+  .help-close {
+    top: 8px;
+    right: 8px;
+  }
+  .pieces-grid {
+    grid-template-columns: 1fr;
+  }
 }
