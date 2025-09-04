@@ -12,7 +12,13 @@
     <h1 id="mainHeading">Centurion — Battle of the Legends</h1>
 
     <div id="turnDisplay">Turn: <span id="turnSide">White</span> <span id="turnIcon">⚪</span></div>
-    <div id="timerDisplay">Time Left: <span id="timeLeft">30</span>s</div>
+    <div id="timerDisplay">
+  <div id="timerLabel">Time Left</div>
+  <div id="timerValue">
+    <span id="timeLeft">30</span>
+    <span id="timeUnit">s</span>
+  </div>
+</div>
     <section id="currentRoundBox">
   <h3 class="panel-title">Current Round</h3>
   <table id="currentRoundTable" class="bowling-table current-round-table big-score">
@@ -83,6 +89,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
