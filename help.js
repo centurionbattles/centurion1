@@ -1,11 +1,11 @@
 (() => {
-  // run after DOM is ready
   const onReady = (fn) =>
     (document.readyState !== 'loading')
       ? fn()
       : document.addEventListener('DOMContentLoaded', fn);
 
   onReady(() => {
+    // ---- cache elements
     const helpButton       = document.getElementById('helpButton');
     const helpOverlay      = document.getElementById('helpOverlay');
     const helpPanel        = document.getElementById('helpPanel');
@@ -15,8 +15,9 @@
 
     if (!helpButton || !helpOverlay || !helpPanel) return;
 
+    // ---- open/close
     const openHelp = () => {
-      helpOverlay.removeAttribute('hidden');          // ensure visible even without CSS
+      helpOverlay.removeAttribute('hidden');
       helpOverlay.classList.add('open');
       helpOverlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
@@ -30,7 +31,6 @@
       document.body.style.overflow = '';
     };
 
-    // wire controls
     helpButton.addEventListener('click', openHelp);
     helpClose && helpClose.addEventListener('click', closeHelp);
     helpOverlay.addEventListener('click', (e) => { if (e.target === helpOverlay) closeHelp(); });
@@ -38,7 +38,7 @@
       if (e.key === 'Escape' && helpOverlay.classList.contains('open')) closeHelp();
     });
 
-    // expand/collapse all
+    // ---- expand/collapse all
     expandAllBtn && expandAllBtn.addEventListener('click', () => {
       helpPanel.querySelectorAll('details').forEach(d => d.open = true);
     });
@@ -46,7 +46,7 @@
       helpPanel.querySelectorAll('details').forEach(d => d.open = false);
     });
 
-    // ===== content dictionaries =====
+    // ---- data dicts
     const NAMES = { K:'King', Q:'Queen', R:'Rook', B:'Bishop', N:'Knight', A:'Archer', W:'Diplomat', P:'Pawn' };
     const MOVES = {
       P:'Forward 1 (2 from start); diagonal capture; promotes on last rank.',
@@ -62,38 +62,40 @@
     const sym = (k) => (window.piecesUnicode?.[k] || FALLBACK_SYM[k] || k);
     const ORDER = ['K','Q','R','B','N','A','W','P'];
 
+    // ---- renderers
     function fillPointsTable() {
       const body = document.getElementById('helpPointsBody');
       if (!body) return;
       const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
-      body.innerHTML = ORDER.map(k => `
-        <tr>
+      body.innerHTML = ORDER.map(k => (
+        `<tr>
           <td>${NAMES[k]}</td>
           <td class="sym">${sym(k)}</td>
           <td>${pp[k] ?? ''}</td>
-        </tr>
-      `).join('');
+        </tr>`
+      )).join('');
     }
 
     function fillPiecesGrid() {
       const host = document.getElementById('helpPiecesGrid');
       if (!host) return;
       const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
-      host.innerHTML = ORDER.map(k => `
-        <div class="piece-card">
+      host.innerHTML = ORDER.map(k => (
+        `<div class="piece-card">
           <div class="piece-sigil">${sym(k)}</div>
           <div>
             <div class="piece-name">${NAMES[k]}</div>
             <div class="piece-moves">${MOVES[k]}</div>
             <div class="piece-points">${pp[k]} points</div>
           </div>
-        </div>
-      `).join('');
+        </div>`
+      )).join('');
     }
 
-    try { fillPointsTable(); fillPiecesGrid(); } catch (e) { /* leave static content */ }
+    // ---- build UI
+    try { fillPointsTable(); fillPiecesGrid(); } catch (e) { /* keep static fallback */ }
 
-    // expose for console testing
+    // expose helpers for console testing
     window.openHelp = openHelp;
     window.closeHelp = closeHelp;
   });
