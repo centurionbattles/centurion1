@@ -114,14 +114,15 @@ body {
 #currentRoundTable tbody tr:nth-child(odd) { background: transparent !important; }
 
 /* Fixed themes per row (NOT dynamic by turn) */
-#currentRoundRowBlack td {
-  background: #000 !important;
-  color: #f5eec2 !important; /* cream */
-}
 #currentRoundRowWhite td {
   background: #fff !important;
   color: #666 !important;    /* grey */
 }
+#currentRoundRowBlack td {
+  background: #000 !important;
+  color: #f5eec2 !important; /* cream */
+}
+
 
 /* Make the numbers large & bold */
 #currentRoundTable tbody td:nth-child(2) span {
