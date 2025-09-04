@@ -60,13 +60,44 @@ body {
   font-size: 1.4em;
   margin-bottom: .4em;
 }
+/* Bigger, prominent timer */
 #timerDisplay {
-  font-size: 1.1em;
-  margin-bottom: .8em;
-  font-weight: bold;
-  color: #d5c5c5;
+  font-size: 2.4rem;            /* larger timer */
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 0.2em 0.6em;
+  border-radius: 0.5em;
+  background: #111;
+  color: #d5c5c5;               /* default neutral color */
+  box-shadow: 0 6px 24px rgba(0,0,0,.4);
+  transition: color .25s ease, background-color .25s ease, transform .25s ease, opacity .25s ease;
+  text-align: center;
+  display: inline-block;
 }
 
+/* Under 10s: go red + pulse a bit */
+#timerDisplay.timer-warning {
+  color: #ff3b30;               /* red text */
+  background: #1a0000;          /* subtle red-tinted background */
+  animation: timerPulse 1.1s ease-in-out infinite;
+}
+
+/* Flashing effect (kept < 3Hz for accessibility) */
+#timerDisplay.timer-flash {
+  animation: timerPulse 1.1s ease-in-out infinite, timerFlash 0.8s steps(2, start) infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+@keyframes timerFlash {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.6; }
+  100% { opacity: 1; }
+}
 /* Score/round tables */
 .bowling-table {
   width: 100%;
