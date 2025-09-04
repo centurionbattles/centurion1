@@ -386,21 +386,41 @@ function updateRoundDisplay() {
   if (roundNumDisplay) roundNumDisplay.textContent = round;
 }
 
-// Update points display
 function updatePointsDisplay() {
-  // small counters (existing spans)
-  if (blackPointsDisplay) {
-    if (blackPointsDisplay.textContent !== String(blackPoints)) {
-      blackPointsDisplay.textContent = blackPoints;
-      pop(blackPointsDisplay);
+  // helper: set text and run your pop() if value changed
+  const setAndPop = (el, val) => {
+    if (!el) return;
+    const t = String(val);
+    if (el.textContent !== t) {
+      el.textContent = t;
+      if (typeof pop === 'function') pop(el);
     }
+  };
+
+  // 1) Small counters
+  setAndPop(blackPointsDisplay, blackPoints);
+  setAndPop(whitePointsDisplay, whitePoints);
+
+  // 2) Current Round table
+  const crBlack = document.getElementById('currentRoundBlackPoints');
+  const crWhite = document.getElementById('currentRoundWhitePoints');
+  setAndPop(crBlack, blackPoints);
+  setAndPop(crWhite, whitePoints);
+
+  // Leader highlight (optional, if you styled .leader)
+  const rowB = document.getElementById('currentRoundRowBlack');
+  const rowW = document.getElementById('currentRoundRowWhite');
+  if (rowB && rowW) {
+    rowB.classList.toggle('leader', blackPoints > whitePoints);
+    rowW.classList.toggle('leader', whitePoints > blackPoints);
   }
-  if (whitePointsDisplay) {
-    if (whitePointsDisplay.textContent !== String(whitePoints)) {
-      whitePointsDisplay.textContent = whitePoints;
-      pop(whitePointsDisplay);
-    }
-  }
+
+  // 3) Total Score table = completed totals + current round live points
+  const totalBlackCell = document.getElementById('totalBlackScore');
+  const totalWhiteCell = document.getElementById('totalWhiteScore');
+  setAndPop(totalBlackCell, blackTotalScore + blackPoints);
+  setAndPop(totalWhiteCell, whiteTotalScore + whitePoints);
+}
 
   // current round table cells
   const bCell = document.getElementById('currentRoundBlackPoints');
@@ -522,21 +542,24 @@ let gameEnded = false;
 let scoreHistoryArr = [];
 
 function endRound() {
-  // Add current round points to total scores
+  // 1) Move current round into totals
   blackTotalScore += blackPoints;
   whiteTotalScore += whitePoints;
 
-  // Save this round's scores
-  scoreHistoryArr.push({
-    round: round,
-    black: blackPoints,
-    white: whitePoints
-  });
+  // 2) Save history
+  scoreHistoryArr.push({ round, black: blackPoints, white: whitePoints });
   updateScoreHistory();
-  updateTotalScoreDisplay();
+
+  // 3) Clear current round to avoid double count on screen
+  blackPoints = 0;
+  whitePoints = 0;
+
+  // 4) Refresh all displays once (small counters, current round, totals)
+  updatePointsDisplay();      // this will also update totals via your new logic
 
   alert(`Scores after round ${round}:\nBlack: ${blackTotalScore}\nWhite: ${whiteTotalScore}`);
 
+  // 5) Advance or finish
   round++;
   if (round > maxRounds) {
     if (blackTotalScore === whiteTotalScore) {
@@ -545,7 +568,7 @@ function endRound() {
       resetRound();
     } else {
       gameEnded = true;
-      let winner = blackTotalScore > whiteTotalScore ? "Black" : "White";
+      const winner = blackTotalScore > whiteTotalScore ? "Black" : "White";
       alert(`${winner} wins the game!\nFinal Scores:\nBlack: ${blackTotalScore}\nWhite: ${whiteTotalScore}`);
     }
   } else {
@@ -579,6 +602,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
