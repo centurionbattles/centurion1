@@ -58,7 +58,7 @@ const ORDER = ['K','Q','R','B','N','A','W','P'];
 (function fillPointsTable(){
   const body = document.getElementById('helpPointsBody');
   if (!body) return;
-  const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
+  const pp = window.piecePoints || {K:20,Q:12,W:6,R:4,B:4,N:3,A:3,P:1};
   body.innerHTML = ORDER.map(k => `
     <tr>
       <td>${_names[k]}</td>
@@ -72,7 +72,7 @@ const ORDER = ['K','Q','R','B','N','A','W','P'];
 (function fillPiecesGrid(){
   const host = document.getElementById('helpPiecesGrid');
   if (!host) return;
-  const pp = window.piecePoints || {K:20,Q:12,R:4,B:4,N:3,A:3,W:6,P:1};
+  const pp = window.piecePoints || {K:20,Q:12,W:6,R:4,B:4,N:3,A:3,P:1};
   host.innerHTML = ORDER.map(k => `
     <div class="piece-card">
       <div class="piece-sigil">${_sym(k)}</div>
