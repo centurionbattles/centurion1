@@ -36,7 +36,13 @@ const piecePoints = {
 function switchPlayer() {
   currentPlayer = currentPlayer === 1 ? 2 : 1;
   updateTurnDisplay();
-  applyTimerTheme();   // ← set theme immediately on turn change
+
+  // Theme the timer by side
+  if (timerDisplay) {
+    timerDisplay.classList.remove('timer-black', 'timer-white');
+    timerDisplay.classList.add(currentPlayer === 1 ? 'timer-black' : 'timer-white');
+  }
+
   resetTimer();
 }
 const piecesUnicode = {
@@ -389,8 +395,11 @@ function startTimer() {
 
   if (timerDisplay) {
     timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+    // reset warning/flash
     timerDisplay.classList.remove('timer-warning', 'timer-flash');
-    applyTimerTheme();  // ← ensure correct theme when (re)starting
+    // ensure correct theme at (re)start
+    timerDisplay.classList.remove('timer-black', 'timer-white');
+    timerDisplay.classList.add(currentPlayer === 1 ? 'timer-black' : 'timer-white');
   }
 
   clearInterval(timerId);
@@ -502,6 +511,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
