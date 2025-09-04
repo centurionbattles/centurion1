@@ -430,9 +430,12 @@ function updatePointsDisplay() {
 function updateTotalScoreDisplay() {
   const blackTotalCell = document.getElementById('totalBlackScore');
   const whiteTotalCell = document.getElementById('totalWhiteScore');
-  if (blackTotalCell) blackTotalCell.textContent = blackTotalScore;
-  if (whiteTotalCell) whiteTotalCell.textContent = whiteTotalScore;
+
+  // Display = totals from completed rounds + current round’s live points
+  if (blackTotalCell) blackTotalCell.textContent = blackTotalScore + blackPoints;
+  if (whiteTotalCell) whiteTotalCell.textContent = whiteTotalScore + whitePoints;
 }
+
 
 // Update points when a piece is captured
 function addPointsForCapture(capturedPiece) {
@@ -576,6 +579,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
