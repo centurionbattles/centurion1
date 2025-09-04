@@ -60,6 +60,113 @@
 #helpOverlay[hidden] {
   display: none !important;
 }
+/* ---------- Help styling upgrades ---------- */
+:root {
+  --help-font: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --help-fg: #111;
+  --help-bg: #fff;
+  --acc-bg: #f6f6f9;
+  --acc-border: #e3e3ef;
+  --acc-header-bg: #2c2c34;
+  --acc-header-fg: #ffe066;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --help-fg: #eee;
+    --help-bg: #111;
+    --acc-bg: #1a1a21;
+    --acc-border: #2a2a33;
+    --acc-header-bg: #222;
+    --acc-header-fg: #ffe066;
+  }
+}
+
+#helpPanel {
+  font-family: var(--help-font);
+  background: var(--help-bg);
+  color: var(--help-fg);
+}
+
+/* Nicer, high-contrast dropdowns */
+.helpContent details {
+  background: var(--acc-bg);
+  border: 1px solid var(--acc-border);
+  border-radius: 12px;
+  margin: .65rem 0;
+  overflow: clip;
+}
+.helpContent summary {
+  margin: 0;
+  padding: .75rem .9rem;
+  cursor: pointer;
+  font-weight: 900;
+  background: var(--acc-header-bg);
+  color: var(--acc-header-fg);
+  list-style: none;
+  position: relative;
+  user-select: none;
+}
+.helpContent summary::-webkit-details-marker { display: none; }
+.helpContent summary::after {
+  content: "▸";
+  position: absolute;
+  right: .8rem;
+  transition: transform .2s ease;
+}
+.helpContent details[open] summary::after { transform: rotate(90deg); }
+.helpContent details > *:not(summary) { padding: .75rem .9rem .9rem; }
+
+/* Points table with symbol column */
+.helpPoints {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+.helpPoints th, .helpPoints td {
+  border: 1px solid var(--acc-border);
+  padding: 8px 10px;
+}
+.helpPoints thead th {
+  background: var(--acc-header-bg);
+  color: var(--acc-header-fg);
+  border-color: var(--acc-header-bg);
+}
+.helpPoints .sym {
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* Pieces gallery grid */
+.pieces-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+}
+@media (min-width: 820px) {
+  .pieces-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+
+.piece-card {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 10px;
+  align-items: center;
+  background: var(--help-bg);
+  border: 1px solid var(--acc-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.piece-sigil {
+  font-size: 2.2rem;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+.piece-name { font-weight: 900; letter-spacing: .2px; }
+.piece-moves { font-size: .95rem; opacity: .9; }
+.piece-points { font-weight: 900; margin-top: 4px; }
 
 /* Use opacity/visibility so it can fade if you add transitions later */
 #helpOverlay {
