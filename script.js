@@ -347,7 +347,9 @@ function showPromotionModal(r, c){
 }
 
 function updateTurnDisplay(){
-  turnDisplay.textContent = `Turn: ${currentPlayer === 1 ? 'Black' : 'White'}`;
+  if (turnSideSpan) turnSideSpan.textContent = currentPlayer === 1 ? 'Black' : 'White';
+  const turnIconEl = document.getElementById('turnIcon');
+  if (turnIconEl) turnIconEl.textContent = currentPlayer === 1 ? '⚫' : '⚪';
 }
 
 const roundNumDisplay = document.getElementById('roundNum');
@@ -535,6 +537,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
