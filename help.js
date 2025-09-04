@@ -8,16 +8,21 @@
 
   if (!helpButton || !helpOverlay || !helpPanel) return;
 
-  const openHelp = () => {
-    helpOverlay.classList.add('open');
-    helpOverlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  };
-  const closeHelp = () => {
-    helpOverlay.classList.remove('open');
-    helpOverlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  };
+const openHelp = () => {
+  if (!helpOverlay) return;
+  helpOverlay.removeAttribute('hidden');   // show (works even if CSS missing)
+  helpOverlay.classList.add('open');       // visible/interactive state
+  helpOverlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden'; // optional: stop background scroll
+};
+
+const closeHelp = () => {
+  if (!helpOverlay) return;
+  helpOverlay.classList.remove('open');    // hide via CSS state
+  helpOverlay.setAttribute('aria-hidden', 'true');
+  helpOverlay.setAttribute('hidden', '');  // ensure display:none
+  document.body.style.overflow = '';       // restore scroll
+};
 
   // Open/close
   helpButton.addEventListener('click', openHelp);
