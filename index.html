@@ -35,18 +35,18 @@
 <!-- Total Score -->
    <div id="totalScores" style="width:100%;">
   <h3>Total Score</h3>
-  <table id="totalScoreTable" class="bowling-table">
-    <tbody>
-      <tr id="totalRowBlack">
-        <td>Black</td>
-        <td id="totalBlackScore">0</td>
-      </tr>
-      <tr id="totalRowWhite">
-        <td>White</td>
-        <td id="totalWhiteScore">0</td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div id="totalScoreWrap" class="total-score-wrap">
+    <div class="total-card total-black">
+      <div class="label">Black</div>
+      <div id="totalBlackScore" class="value">0</div>
+    </div>
+
+    <div class="total-card total-white">
+      <div class="label">White</div>
+      <div id="totalWhiteScore" class="value">0</div>
+    </div>
+  </div>
 </div>
     <!-- Previous Rounds -->
     <div id="previousScores" style="width:100%;">
@@ -82,6 +82,7 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
