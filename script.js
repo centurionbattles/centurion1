@@ -150,19 +150,16 @@ function onSquareClick(r, c) {
       const pts = piecePoints[target.type] || 0;
       // Deduct points from opponent and add to current player
       if (target.player === 1) {
-        whitePoints -= pts;
-        blackPoints += pts;
-      } else if (target.player === 2) {
         blackPoints -= pts;
-        whitePoints += pts;
+      } else if (target.player === 2) {
+        whitePoints -= pts;
       }
       board[r][c].player = currentPlayer;
       // Switch turn and reset selection
       selectedPiece = null;
       validMoves = [];
       updatePointsDisplay();
-      currentPlayer = currentPlayer === 1 ? 2 : 1;
-      updateTurnDisplay();
+      switchPlayer();
       renderBoard();
       return;
     }
@@ -487,4 +484,5 @@ function resetRound() {
 }
 
 initGame();
+
 
