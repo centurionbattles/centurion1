@@ -345,7 +345,22 @@ function showPromotionModal(r, c){
     promotionOptions.appendChild(btn);
   });
 }
+function updateCurrentRoundTable() {
+  const bCell = document.getElementById('currentRoundBlackPoints');
+  const wCell = document.getElementById('currentRoundWhitePoints');
+  const rowB  = document.getElementById('currentRoundRowBlack');
+  const rowW  = document.getElementById('currentRoundRowWhite');
+  if (!bCell || !wCell) return;
 
+  bCell.textContent = blackPoints;
+  wCell.textContent = whitePoints;
+
+  // optional leader highlight if you added CSS for .leader
+  if (rowB && rowW) {
+    rowB.classList.toggle('leader', blackPoints > whitePoints);
+    rowW.classList.toggle('leader', whitePoints > blackPoints);
+  }
+}
 function updateTurnDisplay(){
   if (turnSideSpan) turnSideSpan.textContent = currentPlayer === 1 ? 'Black' : 'White';
   const turnIconEl = document.getElementById('turnIcon');
@@ -535,6 +550,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
