@@ -374,45 +374,45 @@ function updateRoundDisplay() {
 
 // Update points display
 function updatePointsDisplay() {
-  // small counters
-  const prevBP = blackPointsDisplay.textContent;
-  const prevWP = whitePointsDisplay.textContent;
-  blackPointsDisplay.textContent = blackPoints;
-  whitePointsDisplay.textContent = whitePoints;
-  // (optional) animate small counters too
-  if (prevBP !== String(blackPoints)) {
-    blackPointsDisplay.classList.remove('bump'); void blackPointsDisplay.offsetWidth; blackPointsDisplay.classList.add('bump');
+  // small counters (existing spans)
+  if (blackPointsDisplay) {
+    if (blackPointsDisplay.textContent !== String(blackPoints)) {
+      blackPointsDisplay.textContent = blackPoints;
+      pop(blackPointsDisplay);
+    }
   }
-  if (prevWP !== String(whitePoints)) {
-    whitePointsDisplay.classList.remove('bump'); void whitePointsDisplay.offsetWidth; whitePointsDisplay.classList.add('bump');
+  if (whitePointsDisplay) {
+    if (whitePointsDisplay.textContent !== String(whitePoints)) {
+      whitePointsDisplay.textContent = whitePoints;
+      pop(whitePointsDisplay);
+    }
   }
 
   // current round table cells
   const bCell = document.getElementById('currentRoundBlackPoints');
   const wCell = document.getElementById('currentRoundWhitePoints');
   if (bCell) {
-    const old = bCell.textContent;
-    bCell.textContent = blackPoints;
-    if (old !== String(blackPoints)) {
-      bCell.classList.remove('bump'); void bCell.offsetWidth; bCell.classList.add('bump');
+    if (bCell.textContent !== String(blackPoints)) {
+      bCell.textContent = blackPoints;
+      pop(bCell);
     }
   }
   if (wCell) {
-    const old = wCell.textContent;
-    wCell.textContent = whitePoints;
-    if (old !== String(whitePoints)) {
-      wCell.classList.remove('bump'); void wCell.offsetWidth; wCell.classList.add('bump');
+    if (wCell.textContent !== String(whitePoints)) {
+      wCell.textContent = whitePoints;
+      pop(wCell);
     }
   }
 
-  // leader highlight (optional)
-  const rowB = document.getElementById('currentRoundRowBlack');
-  const rowW = document.getElementById('currentRoundRowWhite');
+  // optional leader highlight (keeps your current styles)
+  const rowB  = document.getElementById('currentRoundRowBlack');
+  const rowW  = document.getElementById('currentRoundRowWhite');
   if (rowB && rowW) {
     rowB.classList.toggle('leader', blackPoints > whitePoints);
     rowW.classList.toggle('leader', whitePoints > blackPoints);
   }
 }
+
 function updateTotalScoreDisplay() {
   const blackTotalCell = document.getElementById('totalBlackScore');
   const whiteTotalCell = document.getElementById('totalWhiteScore');
@@ -562,6 +562,7 @@ function resetRound() {
 }
 
 initGame();
+
 
 
 
