@@ -141,7 +141,7 @@ function onSquareClick(r, c) {
     const target = board[r][c];
 
     if (dr <= 1 && dc <= 1 && target && target.player !== currentPlayer && target.type !== 'K') {
-      // Award points to the converter, BEFORE flipping ownership
+      // Award points to the converter BEFORE flipping ownership
       addPointsForCapture(target);
 
       // Convert ownership
@@ -179,60 +179,6 @@ function onSquareClick(r, c) {
   validMoves = [];
   renderBoard();
 }
-
-function convertWithDiplomat(r, c) {
-  addPointsForCapture(board[r][c]);
-  board[r][c].player = currentPlayer;
-  clearSelection();
-  updatePointsDisplay();
-  switchPlayer();
-  renderBoard();
-}
-  // Normal move to a valid square
-  if (validMoves.some(m => m[0] === r && m[1] === c)) {
-    movePiece(selectedPiece.r, selectedPiece.c, r, c);
-    selectedPiece = null;
-    validMoves = [];
-    renderBoard();
-    return;
-  }
-
-  // Clicked another own piece => reselect
-  if (clickedPiece && clickedPiece.player === currentPlayer) {
-    selectedPiece = { r, c, piece: clickedPiece };
-    validMoves = getValidMoves(r, c);
-    renderBoard();
-    return;
-  }
-
-  // Otherwise, deselect
-  selectedPiece = null;
-  validMoves = [];
-  renderBoard();
-}
-  // If clicked on valid move square
-  if (validMoves.some(m => m[0] === r && m[1] === c)) {
-    movePiece(selectedPiece.r, selectedPiece.c, r, c);
-    selectedPiece = null;
-    validMoves = [];
-    renderBoard();
-    return;
-  }
-
-  // Clicked another own piece => select it
-  if (clickedPiece && clickedPiece.player === currentPlayer) {
-    selectedPiece = {r, c, piece: clickedPiece};
-    validMoves = getValidMoves(r, c);
-    renderBoard();
-    return;
-  }
-
-  // Otherwise deselect
-  selectedPiece = null;
-  validMoves = [];
-  renderBoard();
-}
-
 function getValidMoves(r, c) {
   const piece = board[r][c];
   if (!piece) return [];
@@ -277,7 +223,6 @@ function canPawnMove(r1,c1,r2,c2,piece){
   const direction = piece.player === 1 ? 1 : -1;
   const startRow = piece.player === 1 ? 1 : 8;
   const target = board[r2][c2];
-
   if (c1 === c2 && r2 === r1 + direction && !target) return true; // forward 1
   if (c1 === c2 && r1 === startRow && r2 === r1 + 2*direction && !target && !board[r1 + direction][c1]) return true; // forward 2
   if (Math.abs(c2 - c1) === 1 && r2 === r1 + direction && target && target.player !== piece.player) return true; // capture
