@@ -61,31 +61,29 @@ body {
   margin-bottom: .4em;
 }
 /* Bigger, prominent timer */
+/* === Timer (prominent + warning) === */
 #timerDisplay {
-  font-size: 2.4rem;            /* larger timer */
-  line-height: 1;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  padding: 0.2em 0.6em;
-  border-radius: 0.5em;
-  background: #111;
-  color: #d5c5c5;               /* default neutral color */
-  box-shadow: 0 6px 24px rgba(0,0,0,.4);
-  transition: color .25s ease, background-color .25s ease, transform .25s ease, opacity .25s ease;
-  text-align: center;
-  display: inline-block;
+  font-size: 2.6rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.5px !important;
+  padding: 0.25em 0.7em !important;
+  border-radius: 0.6em !important;
+  background: #111 !important;
+  color: #d5c5c5 !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,.4) !important;
+  text-align: center !important;
+  display: inline-block !important;
+  transition: color .25s, background-color .25s, transform .25s, opacity .25s !important;
 }
 
-/* Under 10s: go red + pulse a bit */
 #timerDisplay.timer-warning {
-  color: #ff3b30;               /* red text */
-  background: #1a0000;          /* subtle red-tinted background */
-  animation: timerPulse 1.1s ease-in-out infinite;
+  color: #ff3b30 !important;
+  background: #1a0000 !important;
 }
 
-/* Flashing effect (kept < 3Hz for accessibility) */
 #timerDisplay.timer-flash {
-  animation: timerPulse 1.1s ease-in-out infinite, timerFlash 0.8s steps(2, start) infinite;
+  animation: timerPulse 1.1s ease-in-out infinite, timerFlash 0.8s steps(2, start) infinite !important;
 }
 
 @keyframes timerPulse {
